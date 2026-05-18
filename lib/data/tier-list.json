@@ -1,0 +1,172 @@
+{
+  "meta": {
+    "patchLabelZh": "当前版本梯度表",
+    "patchLabelEn": "Current Patch Tier List",
+    "heroTitleZh": "杀戮尖塔 2 最强流派与核心卡牌",
+    "heroTitleEn": "Slay the Spire 2 Top Builds & Core Cards",
+    "heroDescriptionZh": "职业筛选、语言切换和卡牌详情都在前端即时响应，适合跑图时作为副屏快速查表。",
+    "heroDescriptionEn": "Class filtering, locale switching, and card inspection all respond instantly on the client."
+  },
+  "entries": [
+    {
+      "id": "ironclad-exhaust",
+      "tier": "S",
+      "character": "Ironclad",
+      "titleZh": "铁甲战士 消耗引擎",
+      "titleEn": "Ironclad Exhaust Engine",
+      "noteZh": "启动快、资源滚动强，成型后能在长短战都维持压制。",
+      "noteEn": "Fast setup and elite scaling, with pressure in both short and long fights.",
+      "cardIds": ["Corruption", "DarkEmbrace", "FiendFire", "BurningPact"]
+    },
+    {
+      "id": "silent-shiv",
+      "tier": "S",
+      "character": "Silent",
+      "titleZh": "静默猎手 小刀节奏",
+      "titleEn": "Silent Shiv Tempo",
+      "noteZh": "低费爆发与多段触发兼备，清图和首领都很稳定。",
+      "noteEn": "Efficient burst and multi-hit scaling, strong in hallway and boss fights.",
+      "cardIds": ["Accuracy", "BladeDance", "Afterimage", "CloakAndDagger"]
+    },
+    {
+      "id": "defect-focus",
+      "tier": "S",
+      "character": "Defect",
+      "titleZh": "缺陷行者 集中充能球",
+      "titleEn": "Defect Focus Orbs",
+      "noteZh": "中后期成长最顺滑，防御与输出都能自然叠高。",
+      "noteEn": "One of the smoothest late-game scalers with both defense and damage.",
+      "cardIds": ["Defragment", "BiasedCognition", "Coolheaded", "Buffer"]
+    },
+    {
+      "id": "necrobinder-summon",
+      "tier": "S",
+      "character": "Necrobinder",
+      "titleZh": "死灵术士 召唤爆发",
+      "titleEn": "Necrobinder Summon Burst",
+      "noteZh": "上限极高，成型后能快速改写战斗节奏。",
+      "noteEn": "Explosive ceiling that can take over fights once assembled.",
+      "cardIds": ["Reanimate", "DeathMarch", "Afterlife", "SoulStorm"]
+    },
+    {
+      "id": "ironclad-strength",
+      "tier": "A",
+      "character": "Ironclad",
+      "titleZh": "铁甲战士 力量旋风",
+      "titleEn": "Ironclad Strength Burst",
+      "noteZh": "更依赖牌序，但只要力量堆起来，收尾速度很快。",
+      "noteEn": "Slightly draw-order dependent, but kills quickly once strength stacks.",
+      "cardIds": ["Inflame", "SwordBoomerang", "Whirlwind", "Uppercut"]
+    },
+    {
+      "id": "silent-poison",
+      "tier": "A",
+      "character": "Silent",
+      "titleZh": "静默猎手 毒控拖杀",
+      "titleEn": "Silent Poison Control",
+      "noteZh": "Boss 战表现极好，但前期清杂需要补足节奏。",
+      "noteEn": "Excellent boss damage, but needs help in early hallway tempo.",
+      "cardIds": ["DeadlyPoison", "BouncingFlask", "Malaise", "WraithForm"]
+    },
+    {
+      "id": "defect-zero-cost",
+      "tier": "A",
+      "character": "Defect",
+      "titleZh": "缺陷行者 零费循环",
+      "titleEn": "Defect Zero-Cost Cycle",
+      "noteZh": "一旦组件齐全会非常流畅，但过渡期不如 S 档稳定。",
+      "noteEn": "Very smooth with all pieces online, but less stable during setup.",
+      "cardIds": ["AllForOne", "Claw", "Turbo", "Scrape"]
+    },
+    {
+      "id": "regent-celestial",
+      "tier": "A",
+      "character": "Regent",
+      "titleZh": "摄政者 星界爆发",
+      "titleEn": "Regent Celestial Burst",
+      "noteZh": "后期上限高，适合对局规划清晰的路线。",
+      "noteEn": "High ceiling for well-routed runs with enough setup time.",
+      "cardIds": ["Alignment", "BigBang", "BlackHole", "SevenStars"]
+    },
+    {
+      "id": "ironclad-block",
+      "tier": "B",
+      "character": "Ironclad",
+      "titleZh": "铁甲战士 格挡拍击",
+      "titleEn": "Ironclad Block Slam",
+      "noteZh": "生存优秀，但伤害节奏更吃特定组合。",
+      "noteEn": "Defensively strong, but damage pacing depends on exact payoffs.",
+      "cardIds": ["Barricade", "BodySlam", "TrueGrit", "ShrugItOff"]
+    },
+    {
+      "id": "silent-discard",
+      "tier": "B",
+      "character": "Silent",
+      "titleZh": "静默猎手 弃牌价值",
+      "titleEn": "Silent Discard Value",
+      "noteZh": "灵活度高，但爆发上限通常逊于刀流和毒流。",
+      "noteEn": "Flexible and safe, but usually lower ceiling than shiv or poison lines.",
+      "cardIds": ["Acrobatics", "CalculatedGamble", "Tactician", "ToolsOfTheTrade"]
+    },
+    {
+      "id": "necrobinder-attrition",
+      "tier": "B",
+      "character": "Necrobinder",
+      "titleZh": "死灵术士 消耗拖场",
+      "titleEn": "Necrobinder Attrition",
+      "noteZh": "容错不错，但结束战斗的速度偏慢。",
+      "noteEn": "Reasonable margin for error, but often too slow to close fights fast.",
+      "cardIds": ["Calcify", "Cleanse", "Countdown", "CaptureSpirit"]
+    },
+    {
+      "id": "defect-powers",
+      "tier": "B",
+      "character": "Defect",
+      "titleZh": "缺陷行者 能力叠层",
+      "titleEn": "Defect Power Stack",
+      "noteZh": "上限不低，但启动期容易被高压战惩罚。",
+      "noteEn": "Solid ceiling, though the early setup window is punishable.",
+      "cardIds": ["CreativeAi", "WhiteNoise", "Storm", "Chaos"]
+    },
+    {
+      "id": "ironclad-basic",
+      "tier": "C",
+      "character": "Ironclad",
+      "titleZh": "铁甲战士 朴素快攻",
+      "titleEn": "Ironclad Straight Beatdown",
+      "noteZh": "前期能用，但缺乏后期稳定成长和爆发转化。",
+      "noteEn": "Serviceable early, but lacks reliable late-game scaling.",
+      "cardIds": ["Anger", "TwinStrike", "Thunderclap", "Bash"]
+    },
+    {
+      "id": "silent-chip",
+      "tier": "C",
+      "character": "Silent",
+      "titleZh": "静默猎手 零散蹭伤",
+      "titleEn": "Silent Chip Damage",
+      "noteZh": "能过前几层，但整体强度和成型上限都偏低。",
+      "noteEn": "Can handle early floors, but overall ceiling is limited.",
+      "cardIds": ["Slice", "Backstab", "SuckerPunch", "Dash"]
+    },
+    {
+      "id": "defect-random",
+      "tier": "C",
+      "character": "Defect",
+      "titleZh": "缺陷行者 随机充能球",
+      "titleEn": "Defect Random Orbs",
+      "noteZh": "随机性过高，强度容易随牌序和敌人类型波动。",
+      "noteEn": "Too volatile, with output swinging on draw order and enemy mix.",
+      "cardIds": ["Zap", "Chaos", "CompileDriver", "BallLightning"]
+    },
+    {
+      "id": "regent-slow-burst",
+      "tier": "C",
+      "character": "Regent",
+      "titleZh": "摄政者 慢速大法术",
+      "titleEn": "Regent Slow Spells",
+      "noteZh": "单卡质量不错，但需要太多回合与前置支撑。",
+      "noteEn": "Individual cards are fine, but the setup tax is often too high.",
+      "cardIds": ["Comet", "VoidForm", "Terraforming", "Stardust"]
+    }
+  ]
+}

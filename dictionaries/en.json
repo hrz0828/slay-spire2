@@ -1,0 +1,33 @@
+{
+  "site": {
+    "name": "Slay the Spire 2 Guide"
+  },
+  "meta": {
+    "siteName": "Slay the Spire 2 Guide",
+    "title": "Slay the Spire 2 Guides, Cards, Relics and Tools",
+    "description": "A bilingual Slay the Spire 2 guide site with cards, relics, builds and practical tools."
+  },
+  "nav": {
+    "primary": "Primary navigation",
+    "cards": "Cards",
+    "relics": "Relics",
+    "builds": "Builds",
+    "tools": "Tools"
+  },
+  "home": {
+    "eyebrow": "Bilingual guides and tools",
+    "title": "Slay the Spire 2 guides, card database and build tools",
+    "description": "Structured references for characters, cards, relics, events, archetypes and ascension planning.",
+    "cardsTitle": "Current modules",
+    "cardsDescription": "Start with a stable information architecture, then expand into card filters, relic lookup and build planning.",
+    "sections": {
+      "cards": "Card database",
+      "relics": "Relic index",
+      "builds": "Build routes",
+      "tools": "Tools"
+    }
+  },
+  "footer": {
+    "copyright": "Unofficial guide site. Slay the Spire 2 belongs to its respective owners."
+  }
+}

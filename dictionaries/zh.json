@@ -1,0 +1,33 @@
+{
+  "site": {
+    "name": "杀戮尖塔 2 攻略站"
+  },
+  "meta": {
+    "siteName": "杀戮尖塔 2 攻略站",
+    "title": "杀戮尖塔 2 攻略、卡牌、遗物与工具",
+    "description": "面向中文玩家的 Slay the Spire 2 双语攻略站，提供卡牌、遗物、流派构筑和实用工具。"
+  },
+  "nav": {
+    "primary": "主导航",
+    "cards": "卡牌",
+    "relics": "遗物",
+    "builds": "构筑",
+    "tools": "工具"
+  },
+  "home": {
+    "eyebrow": "双语攻略与工具",
+    "title": "杀戮尖塔 2 攻略、卡牌数据库与构筑工具",
+    "description": "整理角色、卡牌、遗物、事件、流派和进阶路线，面向查表、复盘和构筑规划。",
+    "cardsTitle": "当前模块",
+    "cardsDescription": "先搭建稳定的信息架构，再逐步扩展卡牌筛选、遗物查询和构筑模拟。",
+    "sections": {
+      "cards": "卡牌数据库",
+      "relics": "遗物图鉴",
+      "builds": "构筑路线",
+      "tools": "实用工具"
+    }
+  },
+  "footer": {
+    "copyright": "非官方攻略站。Slay the Spire 2 版权归其所有者所有。"
+  }
+}
