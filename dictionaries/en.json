@@ -20,6 +20,14 @@
     "description": "Structured references for characters, cards, relics, events, archetypes and ascension planning.",
     "cardsTitle": "Current modules",
     "cardsDescription": "Start with a stable information architecture, then expand into card filters, relic lookup and build planning.",
+    "languageSwitch": "中文",
+    "planningTitle": "Early Planning",
+    "planningItems": [
+      "Organize characters, cards, relics, events, archetypes and ascension routes for lookup, run review and build planning.",
+      "Current modules: establish a stable information architecture first, then expand card filtering, relic lookup and build simulation.",
+      "Class filters, language switching and card details respond instantly on the frontend, making the site useful as a second-screen reference during runs.",
+      "Start with lightweight calculation cards to support quick route decisions, with room to expand into interactive calculators later."
+    ],
     "sections": {
       "cards": "Card database",
       "relics": "Relic index",
