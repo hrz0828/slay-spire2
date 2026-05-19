@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import { notFound } from 'next/navigation';
 import '../globals.css';
 import { getDictionary, isLocale, locales, type Locale } from '@/lib/i18n';
@@ -94,6 +95,12 @@ export default async function LangLayout({ children, params }: Props) {
   return (
     <html lang={lang}>
       <body className="min-h-screen overflow-x-hidden bg-gradient-to-br from-[#0c0505] via-[#120a0a] to-[#080303] text-slate-200 antialiased scrollbar-thin scrollbar-track-[#160707] scrollbar-thumb-rose-900 selection:bg-rose-500/30 selection:text-amber-100">
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3222328785646871"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
         <div className="pointer-events-none fixed inset-0 -z-10">
           <div className="absolute inset-x-0 top-0 h-[30rem] bg-[radial-gradient(circle_at_top,rgba(251,191,36,0.16),transparent_34rem)]" />
           <div className="absolute left-1/2 top-16 h-72 w-72 -translate-x-1/2 rounded-full bg-rose-950/30 blur-3xl" />
