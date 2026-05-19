@@ -10,6 +10,31 @@ type Props = {
   }>;
 };
 
+const navItems = {
+  zh: [
+    { label: '卡牌图鉴', href: 'cards' },
+    { label: '遗物数据', href: 'relics' },
+    { label: '强度天梯榜', href: 'builds' },
+    { label: '硬核攻略', href: 'tools' },
+  ],
+  en: [
+    { label: 'Cards', href: 'cards' },
+    { label: 'Artifacts', href: 'relics' },
+    { label: 'Tier List', href: 'builds' },
+    { label: 'Guides', href: 'tools' },
+  ],
+} satisfies Record<Locale, Array<{ label: string; href: string }>>;
+
+const siteLogoText = {
+  zh: '杀戮尖塔 2',
+  en: 'Slay the Spire 2',
+} satisfies Record<Locale, string>;
+
+const siteTagline = {
+  zh: '攻略站',
+  en: 'Guide',
+} satisfies Record<Locale, string>;
+
 export function generateStaticParams() {
   return locales.map(lang => ({ lang }));
 }
@@ -63,40 +88,122 @@ export default async function LangLayout({ children, params }: Props) {
 
   const lang = rawLang as Locale;
   const dict = await getDictionary(lang);
+  const alternateLang: Locale = lang === 'zh' ? 'en' : 'zh';
+  const languageLabel = lang === 'zh' ? 'EN' : '中';
 
   return (
     <html lang={lang}>
-      <body className="min-h-screen bg-spire-radial bg-spire-950 text-bone-100 antialiased">
-        <header className="border-b border-blood-800/70 bg-spire-950/90">
+      <body className="min-h-screen overflow-x-hidden bg-gradient-to-br from-[#0c0505] via-[#120a0a] to-[#080303] text-slate-200 antialiased scrollbar-thin scrollbar-track-[#160707] scrollbar-thumb-rose-900 selection:bg-rose-500/30 selection:text-amber-100">
+        <div className="pointer-events-none fixed inset-0 -z-10">
+          <div className="absolute inset-x-0 top-0 h-[30rem] bg-[radial-gradient(circle_at_top,rgba(251,191,36,0.16),transparent_34rem)]" />
+          <div className="absolute left-1/2 top-16 h-72 w-72 -translate-x-1/2 rounded-full bg-rose-950/30 blur-3xl" />
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.018)_1px,transparent_1px)] bg-[size:72px_72px] opacity-35" />
+        </div>
+
+        <header className="sticky top-0 z-50 border-b border-rose-950/80 bg-[#0b0505]/85 shadow-[0_16px_50px_rgba(0,0,0,0.45)] backdrop-blur-xl">
           <nav
             aria-label={dict.nav.primary}
-            className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-4"
+            className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
           >
-            <a href={`/${lang}`} className="text-base font-semibold text-ember-300">
-              {dict.site.name}
-            </a>
+            <input id="nav-menu-toggle" type="checkbox" className="peer sr-only" />
+            <div className="flex min-h-20 items-center justify-between gap-4">
+              <a href={`/${lang}`} className="group flex items-center gap-3">
+                <span className="relative grid h-11 w-11 place-items-center overflow-hidden rounded-xl border border-amber-300/30 bg-gradient-to-br from-rose-950 via-[#2a0808] to-black shadow-[0_0_28px_rgba(225,29,72,0.32)]">
+                  <span className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(252,211,77,0.36),transparent_2rem)]" />
+                  <span className="relative text-lg font-black text-amber-200 drop-shadow-[0_0_10px_rgba(251,191,36,0.65)]">
+                    II
+                  </span>
+                </span>
+                <span className="leading-tight">
+                  <span className="block bg-gradient-to-r from-amber-200 to-yellow-500 bg-clip-text text-lg font-black tracking-wide text-transparent sm:text-xl">
+                    {siteLogoText[lang]}
+                  </span>
+                  <span className="block text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-rose-500">
+                    {siteTagline[lang]}
+                  </span>
+                </span>
+              </a>
 
-            <div className="flex flex-wrap items-center justify-end gap-4 text-sm text-bone-300">
-              <a className="hover:text-ember-300" href={`/${lang}/cards`}>
-                {dict.nav.cards}
-              </a>
-              <a className="hover:text-ember-300" href={`/${lang}/relics`}>
-                {dict.nav.relics}
-              </a>
-              <a className="hover:text-ember-300" href={`/${lang}/builds`}>
-                {dict.nav.builds}
-              </a>
-              <a className="hover:text-ember-300" href={`/${lang}/tools`}>
-                {dict.nav.tools}
-              </a>
+              <div className="hidden items-center gap-2 lg:flex">
+                {navItems[lang].map(item => (
+                  <a
+                    key={item.href}
+                    href={`/${lang}/${item.href}`}
+                    className="rounded-full border border-transparent px-4 py-2 text-sm font-semibold text-slate-300 transition hover:border-amber-300/30 hover:bg-rose-950/40 hover:text-amber-200"
+                  >
+                    {item.label}
+                  </a>
+                ))}
+              </div>
+
+              <div className="hidden items-center gap-3 lg:flex">
+                <a
+                  href={`/${alternateLang}`}
+                  aria-label={lang === 'zh' ? 'Switch to English' : '切换到中文'}
+                  className="group relative flex h-10 w-20 items-center rounded-full border border-amber-300/25 bg-black/45 p-1 shadow-inner shadow-black/70 transition hover:border-amber-300/55"
+                >
+                  <span
+                    className={`absolute top-1 h-8 w-9 rounded-full bg-gradient-to-r from-amber-200 to-yellow-500 shadow-[0_0_18px_rgba(245,158,11,0.45)] transition-transform duration-300 ease-out ${
+                      lang === 'zh' ? 'translate-x-0' : 'translate-x-9'
+                    }`}
+                  />
+                  <span className="relative z-10 grid w-1/2 place-items-center text-xs font-black text-[#1b0b05]">
+                    中
+                  </span>
+                  <span className="relative z-10 grid w-1/2 place-items-center text-xs font-black text-slate-300 group-hover:text-amber-100">
+                    EN
+                  </span>
+                </a>
+              </div>
+
+              <label
+                htmlFor="nav-menu-toggle"
+                className="grid h-11 w-11 cursor-pointer place-items-center rounded-xl border border-rose-900/70 bg-rose-950/35 text-slate-200 shadow-inner shadow-black/60 transition hover:border-amber-300/40 hover:text-amber-200 lg:hidden"
+                aria-label="Toggle navigation menu"
+              >
+                <span className="space-y-1.5">
+                  <span className="block h-0.5 w-5 rounded-full bg-current transition peer-checked:rotate-45" />
+                  <span className="block h-0.5 w-5 rounded-full bg-current" />
+                  <span className="block h-0.5 w-5 rounded-full bg-current" />
+                </span>
+              </label>
+            </div>
+
+            <div className="grid max-h-0 overflow-hidden transition-[max-height,padding] duration-300 ease-out peer-checked:max-h-96 peer-checked:pb-5 lg:hidden">
+              <div className="rounded-2xl border border-rose-900/70 bg-black/35 p-3 shadow-2xl shadow-black/40">
+                <div className="grid gap-2">
+                  {navItems[lang].map(item => (
+                    <a
+                      key={item.href}
+                      href={`/${lang}/${item.href}`}
+                      className="rounded-xl border border-transparent px-4 py-3 text-sm font-semibold text-slate-200 transition hover:border-amber-300/30 hover:bg-rose-950/50 hover:text-amber-200"
+                    >
+                      {item.label}
+                    </a>
+                  ))}
+                </div>
+                <a
+                  href={`/${alternateLang}`}
+                  className="mt-3 flex items-center justify-between rounded-xl border border-amber-300/20 bg-rose-950/30 px-4 py-3 text-sm font-bold text-amber-100 transition hover:border-amber-300/50"
+                >
+                  <span>{lang === 'zh' ? '切换语言' : 'Language'}</span>
+                  <span className="rounded-full bg-gradient-to-r from-amber-200 to-yellow-500 px-3 py-1 text-xs font-black text-[#1b0b05] transition-transform duration-300 hover:scale-105">
+                    {languageLabel}
+                  </span>
+                </a>
+              </div>
             </div>
           </nav>
         </header>
 
-        <main className="mx-auto w-full max-w-6xl px-4 py-10">{children}</main>
+        <main className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+          {children}
+        </main>
 
-        <footer className="border-t border-blood-900/70 px-4 py-6 text-center text-sm text-bone-500">
-          {dict.footer.copyright}
+        <footer className="border-t border-rose-950/80 bg-black/25 px-4 py-7 text-center text-sm text-slate-500">
+          <span className="bg-gradient-to-r from-slate-500 via-slate-300 to-slate-500 bg-clip-text text-transparent">
+            {dict.footer.copyright}
+          </span>
         </footer>
       </body>
     </html>

@@ -7,16 +7,64 @@
 }
 
 html {
-  background: #090607;
+  background: #080303;
+  scrollbar-color: #881337 #160707;
+  scrollbar-width: thin;
 }
 
 body {
   margin: 0;
 }
 
+body::-webkit-scrollbar {
+  width: 8px;
+}
+
+body::-webkit-scrollbar-track {
+  background: #160707;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #881337, #4c0519);
+  border-radius: 999px;
+  border: 2px solid #160707;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #be123c, #881337);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(0.35rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+
+  .scrollbar-track-\[\#160707\] {
+    scrollbar-color: #881337 #160707;
+  }
+
+  .scrollbar-thumb-rose-900 {
+    scrollbar-color: #881337 #160707;
+  }
+}
+
 a {
   transition:
     color 160ms ease,
     border-color 160ms ease,
-    background-color 160ms ease;
+    background-color 160ms ease,
+    opacity 160ms ease,
+    transform 160ms ease;
 }

@@ -1,15 +1,8 @@
 'use client';
 
-import {
-  createContext,
-  startTransition,
-  useContext,
-  useDeferredValue,
-  useEffect,
-  useState,
-} from 'react';
+import { startTransition, useMemo, useState } from 'react';
 import type { CardEntry } from '@/lib/data/cards';
-import type { TierEntry, TierListMeta, TierRank } from '@/lib/data/tier-list';
+import type { TierCharacter, TierEntry, TierListMeta, TierRank } from '@/lib/data/tier-list';
 
 type Lang = 'zh' | 'en';
 
@@ -19,207 +12,275 @@ type Props = {
   entries: TierEntry[];
 };
 
-type LocaleContextValue = {
-  lang: Lang;
+type CharacterFilter = 'all' | 'Ironclad' | 'Silent' | 'Defect' | 'Necrobinder';
+
+type TierCard = {
+  id: string;
+  tier: TierRank;
+  character: TierCharacter;
+  buildTitleZh: string;
+  buildTitleEn: string;
+  noteZh: string;
+  noteEn: string;
+  card: CardEntry;
 };
 
-const TierLocaleContext = createContext<LocaleContextValue>({ lang: 'zh' });
+const tierOrder: TierRank[] = ['S', 'A', 'B', 'C'];
 
-const tierStyles: Record<TierRank, string> = {
-  S: 'border-red-500/70 bg-red-950/50',
-  A: 'border-orange-500/70 bg-orange-950/45',
-  B: 'border-yellow-500/70 bg-yellow-950/35',
-  C: 'border-stone-500/60 bg-stone-900/55',
-};
-
-const tierBadgeStyles: Record<TierRank, string> = {
-  S: 'bg-red-500 text-red-950',
-  A: 'bg-orange-400 text-orange-950',
-  B: 'bg-yellow-300 text-yellow-950',
-  C: 'bg-stone-300 text-stone-950',
-};
+const tierStyles = {
+  S: {
+    row: 'border-rose-500/50 bg-rose-950/30',
+    badge: 'text-rose-500 border-rose-500/50 bg-rose-950/55 shadow-[0_0_30px_rgba(244,63,94,0.22)]',
+    label: 'God Tier',
+  },
+  A: {
+    row: 'border-amber-500/45 bg-amber-950/20',
+    badge: 'text-amber-500 border-amber-500/50 bg-amber-950/45 shadow-[0_0_30px_rgba(245,158,11,0.18)]',
+    label: 'Core Picks',
+  },
+  B: {
+    row: 'border-yellow-500/35 bg-yellow-950/15',
+    badge: 'text-yellow-400 border-yellow-500/45 bg-yellow-950/35',
+    label: 'Playable',
+  },
+  C: {
+    row: 'border-slate-500/30 bg-slate-950/25',
+    badge: 'text-slate-400 border-slate-500/40 bg-slate-900/55',
+    label: 'Niche',
+  },
+} satisfies Record<TierRank, { row: string; badge: string; label: string }>;
 
 const characterLabels = {
-  all: { zh: '全部职业', en: 'All Classes' },
+  all: { zh: '全职业', en: 'All Classes' },
   Ironclad: { zh: '铁甲战士', en: 'Ironclad' },
   Silent: { zh: '静默猎手', en: 'Silent' },
   Defect: { zh: '缺陷行者', en: 'Defect' },
   Necrobinder: { zh: '死灵术士', en: 'Necrobinder' },
-  Regent: { zh: '摄政者', en: 'Regent' },
-} as const;
+} satisfies Record<CharacterFilter, { zh: string; en: string }>;
 
-function cardTypeLabel(type: string, lang: Lang) {
-  if (lang === 'en') return type;
-  if (type === 'Attack') return '攻击';
-  if (type === 'Skill') return '技能';
-  if (type === 'Power') return '能力';
-  return type;
-}
+const characterTabs = Object.keys(characterLabels) as CharacterFilter[];
 
-function rarityLabel(rarity: string, lang: Lang) {
+function localizeRarity(rarity: string, lang: Lang) {
   if (lang === 'en') return rarity;
-  if (rarity === 'Common') return '普通';
-  if (rarity === 'Uncommon') return '罕见';
-  if (rarity === 'Rare' || rarity === 'Ancient') return '稀有';
-  if (rarity === 'Basic') return '基础';
-  return rarity;
+
+  const labels: Record<string, string> = {
+    Basic: '基础',
+    Common: '普通',
+    Uncommon: '罕见',
+    Rare: '稀有',
+    Ancient: '远古',
+  };
+
+  return labels[rarity] ?? rarity;
 }
 
-function TooltipCard({
-  card,
-  active,
-  onToggle,
-}: {
-  card: CardEntry;
-  active: boolean;
-  onToggle: () => void;
-}) {
-  const { lang } = useContext(TierLocaleContext);
-  const primarySummary = lang === 'zh' ? card.summaryZh : card.summaryEn;
-  const secondarySummary = lang === 'zh' ? card.summaryEn : card.summaryZh;
+function localizeType(type: string, lang: Lang) {
+  if (lang === 'en') return type;
+
+  const labels: Record<string, string> = {
+    Attack: '攻击',
+    Skill: '技能',
+    Power: '能力',
+    Status: '状态',
+    Curse: '诅咒',
+  };
+
+  return labels[type] ?? type;
+}
+
+function keywordLabels(card: CardEntry, lang: Lang) {
+  const tags = card.tags.length > 0 ? card.tags.slice(0, 3) : [card.type, card.rarity];
+
+  return tags.map(tag => {
+    if (lang === 'en') return tag;
+    if (/doom/i.test(tag)) return '厄运';
+    if (/enchant/i.test(tag)) return '附魔';
+    if (/summon/i.test(tag)) return '召唤';
+    if (/exhaust/i.test(tag)) return '消耗';
+    if (/poison/i.test(tag)) return '毒';
+    return tag;
+  });
+}
+
+function flattenTierData(entries: TierEntry[]): TierCard[] {
+  return entries.flatMap(entry =>
+    entry.cards.map(card => ({
+      id: `${entry.id}-${card.id}`,
+      tier: entry.tier,
+      character: entry.character,
+      buildTitleZh: entry.titleZh,
+      buildTitleEn: entry.titleEn,
+      noteZh: entry.noteZh,
+      noteEn: entry.noteEn,
+      card,
+    }))
+  );
+}
+
+function CardTooltip({ item, lang }: { item: TierCard; lang: Lang }) {
+  const cardName = lang === 'zh' ? item.card.nameZh : item.card.nameEn;
+  const buildTitle = lang === 'zh' ? item.buildTitleZh : item.buildTitleEn;
+  const note = lang === 'zh' ? item.noteZh : item.noteEn;
+  const baseText = lang === 'zh' ? item.card.summaryZh : item.card.summaryEn;
+  const upgradedText = lang === 'zh' ? item.card.summaryUpgradedZh : item.card.summaryUpgradedEn;
 
   return (
-    <div className="relative shrink-0">
-      <button
-        type="button"
-        onClick={onToggle}
-        className="group relative flex h-16 w-16 shrink-0 flex-col justify-between overflow-hidden rounded-lg border border-blood-800/70 bg-spire-950/85 p-2 text-left shadow-sm transition-transform duration-150 hover:-translate-y-0.5 hover:border-ember-400/70"
-        aria-expanded={active}
-      >
-        <span className="absolute right-1 top-1 rounded bg-ember-500 px-1.5 py-0.5 text-[10px] font-bold leading-none text-bone-100">
-          {card.cost >= 0 ? card.cost : 'X'}
+    <div className="pointer-events-none absolute left-1/2 top-[calc(100%+0.75rem)] z-30 w-80 -translate-x-1/2 rounded-2xl border border-amber-300/25 bg-[#100606]/95 p-4 text-left opacity-0 shadow-[0_24px_80px_rgba(0,0,0,0.55)] backdrop-blur-xl transition duration-200 group-hover:pointer-events-auto group-hover:translate-y-1 group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:translate-y-1 group-focus-within:opacity-100 max-sm:hidden">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.24em] text-rose-500">{buildTitle}</p>
+          <h4 className="mt-1 text-base font-black text-amber-100">{cardName}</h4>
+        </div>
+        <span className="rounded-lg bg-gradient-to-r from-amber-200 to-yellow-500 px-2 py-1 text-xs font-black text-[#1b0b05]">
+          {item.card.cost >= 0 ? item.card.cost : 'X'}
         </span>
-        <span className="max-w-[2.8rem] text-[10px] font-semibold uppercase leading-tight text-bone-100">
-          {(lang === 'zh' ? card.nameZh : card.nameEn).slice(0, 8)}
-        </span>
-        <span className="text-[10px] text-bone-500">{card.type.slice(0, 1)}</span>
-      </button>
+      </div>
 
-      {active && (
-        <>
-          <div className="absolute left-0 top-[calc(100%+0.6rem)] z-20 hidden w-80 rounded-lg border border-blood-800/80 bg-spire-950/95 p-4 shadow-2xl sm:block">
-            <div className="space-y-2">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h4 className="text-base font-semibold text-bone-100">{card.nameZh}</h4>
-                  <p className="text-sm text-bone-300">{card.nameEn}</p>
-                </div>
-                <span className="rounded bg-ember-500 px-2 py-1 text-xs font-bold text-bone-100">
-                  {lang === 'zh' ? '费用' : 'Cost'} {card.cost >= 0 ? card.cost : 'X'}
-                </span>
-              </div>
-              <p className="text-xs text-ember-300">
-                {rarityLabel(card.rarity, lang)} · {cardTypeLabel(card.type, lang)}
-              </p>
-              <p className="whitespace-pre-line text-sm leading-6 text-bone-100">{primarySummary}</p>
-              <p className="whitespace-pre-line border-t border-blood-900/70 pt-3 text-xs leading-5 text-bone-400">
-                {secondarySummary}
-              </p>
-            </div>
-          </div>
+      <p className="mt-2 text-xs font-semibold text-slate-400">
+        {localizeRarity(item.card.rarity, lang)} · {localizeType(item.card.type, lang)}
+      </p>
+      <p className="mt-3 text-sm leading-6 text-slate-200">{note}</p>
 
-          <div className="fixed inset-x-4 bottom-4 z-30 rounded-lg border border-blood-800/80 bg-spire-950/95 p-4 shadow-2xl sm:hidden">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <h4 className="text-base font-semibold text-bone-100">{card.nameZh}</h4>
-                <p className="text-sm text-bone-300">{card.nameEn}</p>
-              </div>
-              <button
-                type="button"
-                onClick={onToggle}
-                className="rounded border border-blood-800/70 px-2 py-1 text-xs text-bone-300"
-              >
-                {lang === 'zh' ? '关闭' : 'Close'}
-              </button>
-            </div>
-            <p className="mt-2 text-xs text-ember-300">
-              {rarityLabel(card.rarity, lang)} · {cardTypeLabel(card.type, lang)} ·{' '}
-              {lang === 'zh' ? '费用' : 'Cost'} {card.cost >= 0 ? card.cost : 'X'}
-            </p>
-            <p className="mt-3 whitespace-pre-line text-sm leading-6 text-bone-100">{primarySummary}</p>
-            <p className="mt-3 whitespace-pre-line border-t border-blood-900/70 pt-3 text-xs leading-5 text-bone-400">
-              {secondarySummary}
-            </p>
-          </div>
-        </>
-      )}
+      <div className="mt-4 space-y-3 border-t border-rose-950 pt-4">
+        <div>
+          <p className="text-[0.68rem] font-black uppercase tracking-[0.22em] text-slate-500">
+            {lang === 'zh' ? '升级前' : 'Base'}
+          </p>
+          <p className="mt-1 whitespace-pre-line text-sm leading-6 text-slate-300">{baseText}</p>
+        </div>
+        <div>
+          <p className="text-[0.68rem] font-black uppercase tracking-[0.22em] text-amber-500">
+            {lang === 'zh' ? '升级后' : 'Upgraded'}
+          </p>
+          <p className="mt-1 whitespace-pre-line text-sm leading-6 text-amber-100">{upgradedText}</p>
+        </div>
+      </div>
+
+      <div className="mt-4 flex flex-wrap gap-2">
+        {keywordLabels(item.card, lang).map(keyword => (
+          <span key={keyword} className="rounded-full border border-rose-500/30 bg-rose-950/45 px-2 py-1 text-xs font-bold text-rose-100">
+            {keyword}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
 
-function TierSection({
-  tier,
-  entries,
-  activeCardId,
-  onCardToggle,
+function TierCardButton({
+  item,
+  lang,
+  active,
+  onOpen,
 }: {
-  tier: TierRank;
-  entries: TierEntry[];
-  activeCardId: string | null;
-  onCardToggle: (id: string) => void;
+  item: TierCard;
+  lang: Lang;
+  active: boolean;
+  onOpen: () => void;
 }) {
-  const { lang } = useContext(TierLocaleContext);
-
-  if (entries.length === 0) {
-    return null;
-  }
+  const cardName = lang === 'zh' ? item.card.nameZh : item.card.nameEn;
+  const initials = cardName.replace(/\s+/g, '').slice(0, 2).toUpperCase();
 
   return (
-    <section className={`rounded-lg border p-4 sm:p-5 ${tierStyles[tier]}`}>
-      <div className="mb-4 flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <span className={`rounded px-3 py-1 text-sm font-black ${tierBadgeStyles[tier]}`}>{tier}</span>
-          <div>
-            <h2 className="text-lg font-semibold text-bone-100">
-              {lang === 'zh' ? `${tier} 级推荐` : `${tier} Tier Picks`}
-            </h2>
-            <p className="text-sm text-bone-300">
-              {lang === 'zh'
-                ? '点击卡牌图标查看中英双语属性。'
-                : 'Tap any card icon to inspect bilingual details.'}
-            </p>
-          </div>
+    <button
+      type="button"
+      onClick={onOpen}
+      className={`group relative flex h-[5.5rem] w-[5.5rem] shrink-0 flex-col items-center justify-center rounded-2xl border bg-black/35 p-2 text-center shadow-inner shadow-black/70 transition duration-200 hover:-translate-y-1 hover:scale-[1.02] hover:border-amber-300/60 focus:outline-none focus:ring-2 focus:ring-amber-300/60 ${
+        active ? 'border-amber-300/80 ring-2 ring-amber-300/40' : 'border-rose-900/70'
+      }`}
+      aria-expanded={active}
+    >
+      <span className="grid h-10 w-10 place-items-center rounded-xl border border-amber-300/20 bg-gradient-to-br from-rose-950 via-[#2a0808] to-black text-xs font-black text-amber-100 shadow-[0_0_22px_rgba(225,29,72,0.2)]">
+        {initials}
+      </span>
+      <span className="mt-2 line-clamp-2 text-[0.68rem] font-bold leading-tight text-slate-200">
+        {cardName}
+      </span>
+      <CardTooltip item={item} lang={lang} />
+    </button>
+  );
+}
+
+function MobileDetail({ item, lang, onClose }: { item: TierCard; lang: Lang; onClose: () => void }) {
+  const cardName = lang === 'zh' ? item.card.nameZh : item.card.nameEn;
+  const baseText = lang === 'zh' ? item.card.summaryZh : item.card.summaryEn;
+  const upgradedText = lang === 'zh' ? item.card.summaryUpgradedZh : item.card.summaryUpgradedEn;
+
+  return (
+    <div className="fixed inset-x-3 bottom-3 z-50 rounded-2xl border border-amber-300/25 bg-[#100606]/95 p-4 shadow-[0_24px_90px_rgba(0,0,0,0.7)] backdrop-blur-xl sm:hidden">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.24em] text-rose-500">{item.tier} Tier</p>
+          <h4 className="mt-1 text-base font-black text-amber-100">{cardName}</h4>
+          <p className="mt-1 text-xs font-semibold text-slate-400">
+            {localizeRarity(item.card.rarity, lang)} · {localizeType(item.card.type, lang)}
+          </p>
         </div>
-        <span className="text-xs uppercase tracking-[0.2em] text-bone-500">{entries.length} builds</span>
+        <button
+          type="button"
+          onClick={onClose}
+          className="rounded-lg border border-rose-900/80 px-3 py-1 text-xs font-bold text-slate-300"
+        >
+          {lang === 'zh' ? '关闭' : 'Close'}
+        </button>
+      </div>
+      <div className="mt-4 grid gap-3 text-sm leading-6">
+        <p className="whitespace-pre-line text-slate-300">{baseText}</p>
+        <p className="whitespace-pre-line rounded-xl border border-amber-300/15 bg-amber-300/10 p-3 text-amber-100">
+          {upgradedText}
+        </p>
+      </div>
+      <div className="mt-4 flex flex-wrap gap-2">
+        {keywordLabels(item.card, lang).map(keyword => (
+          <span key={keyword} className="rounded-full border border-rose-500/30 bg-rose-950/45 px-2 py-1 text-xs font-bold text-rose-100">
+            {keyword}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TierRow({
+  tier,
+  items,
+  lang,
+  activeId,
+  onOpenCard,
+}: {
+  tier: TierRank;
+  items: TierCard[];
+  lang: Lang;
+  activeId: string | null;
+  onOpenCard: (id: string) => void;
+}) {
+  const styles = tierStyles[tier];
+
+  return (
+    <section className={`grid gap-4 rounded-3xl border p-4 transition-opacity duration-300 sm:grid-cols-[7rem_minmax(0,1fr)] sm:p-5 ${styles.row}`}>
+      <div className={`flex items-center justify-between rounded-2xl border p-4 sm:flex-col sm:items-start ${styles.badge}`}>
+        <span className="text-5xl font-black leading-none">{tier}</span>
+        <span className="text-xs font-black uppercase tracking-[0.22em] text-current/70">{styles.label}</span>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-        {entries.map(entry => (
-          <article key={entry.id} className="min-w-0 rounded-lg border border-black/20 bg-black/15 p-4">
-            <div className="flex items-start justify-between gap-4">
-              <div className="min-w-0">
-                <p className="text-xs uppercase tracking-[0.18em] text-ember-300">
-                  {lang === 'zh'
-                    ? characterLabels[entry.character].zh
-                    : characterLabels[entry.character].en}
-                </p>
-                <h3 className="mt-1 text-lg font-semibold leading-tight text-bone-100">
-                  {lang === 'zh' ? entry.titleZh : entry.titleEn}
-                </h3>
-              </div>
-              <span className="shrink-0 rounded border border-blood-900/70 px-2 py-1 text-[11px] text-bone-300">
-                {entry.cards.length} cards
-              </span>
-            </div>
-
-            <p className="mt-3 text-sm leading-6 text-bone-300">
-              {lang === 'zh' ? entry.noteZh : entry.noteEn}
-            </p>
-
-            <div className="mt-4 overflow-x-auto pb-2">
-              <div className="flex min-w-max gap-2">
-                {entry.cards.map(card => (
-                  <TooltipCard
-                    key={card.id}
-                    card={card}
-                    active={activeCardId === card.id}
-                    onToggle={() => onCardToggle(card.id)}
-                  />
-                ))}
-              </div>
-            </div>
-          </article>
-        ))}
+      <div className="min-w-0 overflow-x-auto pb-2">
+        {items.length > 0 ? (
+          <div className="grid auto-cols-[5.5rem] grid-flow-col gap-3 sm:grid-flow-row sm:grid-cols-[repeat(auto-fill,minmax(5.5rem,1fr))]">
+            {items.map(item => (
+              <TierCardButton
+                key={item.id}
+                item={item}
+                lang={lang}
+                active={activeId === item.id}
+                onOpen={() => onOpenCard(item.id)}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="grid min-h-[5.5rem] place-items-center rounded-2xl border border-dashed border-slate-700/70 text-sm text-slate-500">
+            {lang === 'zh' ? '该职业暂无此评级卡牌' : 'No cards in this tier for this class'}
+          </div>
+        )}
       </div>
     </section>
   );
@@ -227,97 +288,115 @@ function TierSection({
 
 export default function TierListBoard({ initialLang, meta, entries }: Props) {
   const [lang, setLang] = useState<Lang>(initialLang);
-  const [character, setCharacter] = useState<keyof typeof characterLabels>('all');
+  const [character, setCharacter] = useState<CharacterFilter>('all');
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
-  const deferredCharacter = useDeferredValue(character);
 
-  useEffect(() => {
-    setActiveCardId(null);
-  }, [deferredCharacter, lang]);
+  const tierData = useMemo(() => flattenTierData(entries), [entries]);
 
-  const filteredEntries =
-    deferredCharacter === 'all'
-      ? entries
-      : entries.filter(entry => entry.character === deferredCharacter);
+  const filteredData = useMemo(() => {
+    if (character === 'all') return tierData;
+    return tierData.filter(item => item.character === character);
+  }, [character, tierData]);
 
-  const sections: TierRank[] = ['S', 'A', 'B', 'C'];
+  const activeItem = activeCardId
+    ? filteredData.find(item => item.id === activeCardId) ?? null
+    : null;
+
+  function switchLang(nextLang: Lang) {
+    startTransition(() => {
+      setLang(nextLang);
+      setActiveCardId(null);
+    });
+  }
+
+  function switchCharacter(nextCharacter: CharacterFilter) {
+    startTransition(() => {
+      setCharacter(nextCharacter);
+      setActiveCardId(null);
+    });
+  }
 
   return (
-    <TierLocaleContext.Provider value={{ lang }}>
-      <section className="space-y-6">
-        <div className="overflow-hidden rounded-lg border border-blood-800/70 bg-spire-900/85">
-          <div className="border-b border-blood-900/70 bg-[radial-gradient(circle_at_top_left,rgba(240,138,60,0.28),transparent_45%),linear-gradient(135deg,rgba(100,17,17,0.45),rgba(9,6,7,0.95))] p-5 sm:p-6">
-            <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-              <div className="max-w-3xl">
-                <p className="text-xs uppercase tracking-[0.28em] text-ember-300">
-                  {lang === 'zh' ? meta.patchLabelZh : meta.patchLabelEn}
-                </p>
-                <h1 className="mt-3 text-3xl font-black leading-tight text-bone-100 sm:text-4xl">
-                  {lang === 'zh' ? meta.heroTitleZh : meta.heroTitleEn}
-                </h1>
-                <p className="mt-3 max-w-2xl text-sm leading-6 text-bone-300 sm:text-base">
-                  {lang === 'zh' ? meta.heroDescriptionZh : meta.heroDescriptionEn}
-                </p>
-              </div>
-
-              <div className="inline-flex rounded-lg border border-blood-900/70 bg-spire-950/70 p-1">
-                <button
-                  type="button"
-                  onClick={() => {
-                    startTransition(() => setLang('zh'));
-                  }}
-                  className={`rounded px-4 py-2 text-sm ${lang === 'zh' ? 'bg-ember-500 text-bone-100' : 'text-bone-300 hover:text-bone-100'}`}
-                >
-                  中文
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    startTransition(() => setLang('en'));
-                  }}
-                  className={`rounded px-4 py-2 text-sm ${lang === 'en' ? 'bg-ember-500 text-bone-100' : 'text-bone-300 hover:text-bone-100'}`}
-                >
-                  EN
-                </button>
-              </div>
+    <section className="space-y-6">
+      <div className="overflow-hidden rounded-[2rem] border border-rose-900/70 bg-black/35 shadow-[0_0_70px_rgba(136,19,55,0.18)]">
+        <div className="bg-[radial-gradient(circle_at_top_left,rgba(251,191,36,0.2),transparent_30rem),linear-gradient(135deg,rgba(76,5,25,0.5),rgba(8,3,3,0.95))] p-5 sm:p-7">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-3xl">
+              <p className="text-xs font-black uppercase tracking-[0.3em] text-rose-500">
+                {lang === 'zh' ? meta.patchLabelZh : meta.patchLabelEn}
+              </p>
+              <h1 className="mt-3 bg-gradient-to-r from-amber-100 via-yellow-400 to-rose-500 bg-clip-text text-3xl font-black leading-tight text-transparent sm:text-5xl">
+                {lang === 'zh' ? meta.heroTitleZh : meta.heroTitleEn}
+              </h1>
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
+                {lang === 'zh' ? meta.heroDescriptionZh : meta.heroDescriptionEn}
+              </p>
             </div>
-          </div>
 
-          <div className="p-4 sm:p-5">
-            <div className="flex gap-2 overflow-x-auto pb-1">
-              {(Object.keys(characterLabels) as Array<keyof typeof characterLabels>).map(key => (
-                <button
-                  key={key}
-                  type="button"
-                  aria-pressed={character === key}
-                  onClick={() => {
-                    startTransition(() => setCharacter(key));
-                  }}
-                  className={`shrink-0 rounded-full border px-4 py-2 text-sm transition-colors ${
-                    character === key
-                      ? 'border-ember-400 bg-ember-500 text-bone-100'
-                      : 'border-blood-900/70 bg-spire-950/60 text-bone-300 hover:border-ember-400/60 hover:text-bone-100'
-                  }`}
-                >
-                  {lang === 'zh' ? characterLabels[key].zh : characterLabels[key].en}
-                </button>
-              ))}
+            <div className="inline-flex w-fit rounded-full border border-amber-300/25 bg-black/45 p-1 shadow-inner shadow-black/70">
+              <button
+                type="button"
+                onClick={() => switchLang('zh')}
+                className={`rounded-full px-4 py-2 text-sm font-black transition ${
+                  lang === 'zh'
+                    ? 'bg-gradient-to-r from-amber-200 to-yellow-500 text-[#1b0b05]'
+                    : 'text-slate-400 hover:text-amber-100'
+                }`}
+              >
+                中文
+              </button>
+              <button
+                type="button"
+                onClick={() => switchLang('en')}
+                className={`rounded-full px-4 py-2 text-sm font-black transition ${
+                  lang === 'en'
+                    ? 'bg-gradient-to-r from-amber-200 to-yellow-500 text-[#1b0b05]'
+                    : 'text-slate-400 hover:text-amber-100'
+                }`}
+              >
+                EN
+              </button>
             </div>
           </div>
         </div>
 
-        <div className="space-y-4">
-          {sections.map(tier => (
-            <TierSection
-              key={tier}
-              tier={tier}
-              entries={filteredEntries.filter(entry => entry.tier === tier)}
-              activeCardId={activeCardId}
-              onCardToggle={id => setActiveCardId(current => (current === id ? null : id))}
-            />
-          ))}
+        <div className="p-4 sm:p-5">
+          <div className="flex gap-2 overflow-x-auto pb-1">
+            {characterTabs.map(tab => (
+              <button
+                key={tab}
+                type="button"
+                aria-pressed={character === tab}
+                onClick={() => switchCharacter(tab)}
+                className={`shrink-0 rounded-full border px-4 py-2 text-sm font-bold transition duration-200 ${
+                  character === tab
+                    ? 'border-amber-300/60 bg-amber-300/15 text-amber-100 shadow-[0_0_22px_rgba(245,158,11,0.18)]'
+                    : 'border-rose-900/70 bg-[#120606]/70 text-slate-300 hover:border-amber-300/40 hover:text-amber-100'
+                }`}
+              >
+                {characterLabels[tab][lang]}
+              </button>
+            ))}
+          </div>
         </div>
-      </section>
-    </TierLocaleContext.Provider>
+      </div>
+
+      <div key={`${lang}-${character}`} className="space-y-4 animate-[fadeIn_220ms_ease-out]">
+        {tierOrder.map(tier => (
+          <TierRow
+            key={tier}
+            tier={tier}
+            items={filteredData.filter(item => item.tier === tier)}
+            lang={lang}
+            activeId={activeCardId}
+            onOpenCard={id => setActiveCardId(current => (current === id ? null : id))}
+          />
+        ))}
+      </div>
+
+      {activeItem && (
+        <MobileDetail item={activeItem} lang={lang} onClose={() => setActiveCardId(null)} />
+      )}
+    </section>
   );
 }
