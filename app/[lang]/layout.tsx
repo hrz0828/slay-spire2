@@ -94,6 +94,9 @@ export default async function LangLayout({ children, params }: Props) {
 
   return (
     <html lang={lang}>
+      <head>
+        <meta name="baidu-site-verification" content="codeva-ov0tsUrwXv" />
+      </head>
       <body className="min-h-screen overflow-x-hidden bg-gradient-to-br from-[#0c0505] via-[#120a0a] to-[#080303] text-slate-200 antialiased scrollbar-thin scrollbar-track-[#160707] scrollbar-thumb-rose-900 selection:bg-rose-500/30 selection:text-amber-100">
         <Script
           async

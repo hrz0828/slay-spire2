@@ -1,22 +1,81 @@
 import type { MetadataRoute } from 'next';
-import { locales } from '@/lib/i18n';
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
 
-const routes = ['', '/cards', '/relics', '/builds', '/tools'];
+type Card = { id: string };
+type Article = { slug: string };
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ?? 'https://slay-spire2-guide.pages.dev';
+const SITE_URL = 'https://sts2hub.com';
+const LOCALES = ['zh', 'en'] as const;
 
-  return locales.flatMap(lang =>
-    routes.map(route => ({
-      url: `${siteUrl}/${lang}${route}`,
-      lastModified: new Date(),
-      alternates: {
-        languages: {
-          zh: `${siteUrl}/zh${route}`,
-          en: `${siteUrl}/en${route}`,
-        },
-      },
-    }))
-  );
+const HOME_PRIORITY = 1.0;
+const ARTICLE_PRIORITY = 0.9;
+const CARD_PRIORITY = 0.8;
+
+const HOME_FREQ: MetadataRoute.Sitemap[number]['changeFrequency'] = 'daily';
+const ARTICLE_FREQ: MetadataRoute.Sitemap[number]['changeFrequency'] = 'daily';
+const CARD_FREQ: MetadataRoute.Sitemap[number]['changeFrequency'] = 'weekly';
+
+async function readJsonArray<T>(filePath: string): Promise<T[]> {
+  try {
+    const raw = await readFile(filePath, 'utf8');
+    const parsed = JSON.parse(raw) as unknown;
+    return Array.isArray(parsed) ? (parsed as T[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+function buildLocalizedAlternates(routePath: string) {
+  return {
+    languages: {
+      zh: `${SITE_URL}/zh${routePath}`,
+      en: `${SITE_URL}/en${routePath}`,
+    },
+  };
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const now = new Date();
+  const cardsPath = path.join(process.cwd(), 'public', 'data', 'cards.json');
+  const articlesPath = path.join(process.cwd(), 'public', 'data', 'articles.json');
+
+  const [cards, articles] = await Promise.all([
+    readJsonArray<Card>(cardsPath),
+    readJsonArray<Article>(articlesPath),
+  ]);
+
+  const homeUrls: MetadataRoute.Sitemap = LOCALES.map(lang => ({
+    url: `${SITE_URL}/${lang}`,
+    lastModified: now,
+    changeFrequency: HOME_FREQ,
+    priority: HOME_PRIORITY,
+    alternates: buildLocalizedAlternates(''),
+  }));
+
+  const cardUrls: MetadataRoute.Sitemap = cards
+    .filter(card => typeof card.id === 'string' && card.id.trim().length > 0)
+    .flatMap(card =>
+      LOCALES.map(lang => ({
+        url: `${SITE_URL}/${lang}/cards/${card.id}`,
+        lastModified: now,
+        changeFrequency: CARD_FREQ,
+        priority: CARD_PRIORITY,
+        alternates: buildLocalizedAlternates(`/cards/${card.id}`),
+      })),
+    );
+
+  const articleUrls: MetadataRoute.Sitemap = articles
+    .filter(article => typeof article.slug === 'string' && article.slug.trim().length > 0)
+    .flatMap(article =>
+      LOCALES.map(lang => ({
+        url: `${SITE_URL}/${lang}/articles/${article.slug}`,
+        lastModified: now,
+        changeFrequency: ARTICLE_FREQ,
+        priority: ARTICLE_PRIORITY,
+        alternates: buildLocalizedAlternates(`/articles/${article.slug}`),
+      })),
+    );
+
+  return [...homeUrls, ...articleUrls, ...cardUrls];
 }
