@@ -24,14 +24,29 @@ function detectLocale(request: NextRequest): Locale {
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const localeFromPath = pathname.split('/')[1];
+
+  // Keep /en prefixed, but canonicalize /zh to no-prefix paths.
+  if (localeFromPath === defaultLocale) {
+    const url = request.nextUrl.clone();
+    const rest = pathname.replace(new RegExp(`^/${defaultLocale}`), '') || '/';
+    url.pathname = rest;
+    const response = NextResponse.redirect(url, 308);
+    response.cookies.set('NEXT_LOCALE', defaultLocale, {
+      path: '/',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 365,
+    });
+    return response;
+  }
 
   const pathnameHasLocale = locales.some(
-    locale => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)
+    locale => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`),
   );
 
   if (pathnameHasLocale) {
     const response = NextResponse.next();
-    const locale = pathname.split('/')[1];
+    const locale = localeFromPath;
 
     if (isLocale(locale)) {
       response.cookies.set('NEXT_LOCALE', locale, {
@@ -44,9 +59,16 @@ export function middleware(request: NextRequest) {
     return response;
   }
 
-  const locale = detectLocale(request);
   const url = request.nextUrl.clone();
+  const locale = detectLocale(request);
 
+  if (locale === defaultLocale) {
+    // Rewrite to internal /zh route while keeping user-facing URL without /zh.
+    url.pathname = `/${defaultLocale}${pathname === '/' ? '' : pathname}`;
+    return NextResponse.rewrite(url);
+  }
+
+  // Non-default locales stay prefixed in the URL.
   url.pathname = `/${locale}${pathname === '/' ? '' : pathname}`;
 
   return NextResponse.redirect(url);
