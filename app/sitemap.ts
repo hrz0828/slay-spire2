@@ -1,32 +1,47 @@
 import type { MetadataRoute } from 'next';
-import { readFile } from 'node:fs/promises';
+import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 
-type Card = { id: string };
-type Article = { slug: string };
+type RawCardFile = {
+  card?: {
+    key?: string;
+  };
+};
 
-const SITE_URL = 'https://sts2hub.com';
+const SITE_URL = 'https://yourdomain.com';
 const LOCALES = ['zh', 'en'] as const;
+const CARDS_DIR = path.join(process.cwd(), 'cards');
 
-const HOME_PRIORITY = 1.0;
-const ARTICLE_PRIORITY = 0.9;
-const CARD_PRIORITY = 0.8;
-
-const HOME_FREQ: MetadataRoute.Sitemap[number]['changeFrequency'] = 'daily';
-const ARTICLE_FREQ: MetadataRoute.Sitemap[number]['changeFrequency'] = 'daily';
-const CARD_FREQ: MetadataRoute.Sitemap[number]['changeFrequency'] = 'weekly';
-
-async function readJsonArray<T>(filePath: string): Promise<T[]> {
+function loadCardKeys(): string[] {
+  let files: string[] = [];
   try {
-    const raw = await readFile(filePath, 'utf8');
-    const parsed = JSON.parse(raw) as unknown;
-    return Array.isArray(parsed) ? (parsed as T[]) : [];
+    files = readdirSync(CARDS_DIR);
   } catch {
     return [];
   }
+
+  const keys = new Set<string>();
+
+  for (const file of files) {
+    if (!file.endsWith('.json')) continue;
+
+    try {
+      const fullPath = path.join(CARDS_DIR, file);
+      const raw = readFileSync(fullPath, 'utf8');
+      const parsed = JSON.parse(raw) as RawCardFile;
+      const key = parsed.card?.key;
+      if (typeof key === 'string' && key.trim().length > 0) {
+        keys.add(key.trim());
+      }
+    } catch {
+      // Ignore malformed files.
+    }
+  }
+
+  return Array.from(keys);
 }
 
-function buildLocalizedAlternates(routePath: string) {
+function localizedAlternates(routePath: string) {
   return {
     languages: {
       zh: `${SITE_URL}/zh${routePath}`,
@@ -35,47 +50,27 @@ function buildLocalizedAlternates(routePath: string) {
   };
 }
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  const cardsPath = path.join(process.cwd(), 'public', 'data', 'cards.json');
-  const articlesPath = path.join(process.cwd(), 'public', 'data', 'articles.json');
+  const cardKeys = loadCardKeys();
 
-  const [cards, articles] = await Promise.all([
-    readJsonArray<Card>(cardsPath),
-    readJsonArray<Article>(articlesPath),
-  ]);
-
-  const homeUrls: MetadataRoute.Sitemap = LOCALES.map(lang => ({
+  const homeEntries: MetadataRoute.Sitemap = LOCALES.map(lang => ({
     url: `${SITE_URL}/${lang}`,
     lastModified: now,
-    changeFrequency: HOME_FREQ,
-    priority: HOME_PRIORITY,
-    alternates: buildLocalizedAlternates(''),
+    changeFrequency: 'daily',
+    priority: 1.0,
+    alternates: localizedAlternates(''),
   }));
 
-  const cardUrls: MetadataRoute.Sitemap = cards
-    .filter(card => typeof card.id === 'string' && card.id.trim().length > 0)
-    .flatMap(card =>
-      LOCALES.map(lang => ({
-        url: `${SITE_URL}/${lang}/cards/${card.id}`,
-        lastModified: now,
-        changeFrequency: CARD_FREQ,
-        priority: CARD_PRIORITY,
-        alternates: buildLocalizedAlternates(`/cards/${card.id}`),
-      })),
-    );
+  const cardEntries: MetadataRoute.Sitemap = cardKeys.flatMap(key =>
+    LOCALES.map(lang => ({
+      url: `${SITE_URL}/${lang}/cards/${key}`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+      alternates: localizedAlternates(`/cards/${key}`),
+    })),
+  );
 
-  const articleUrls: MetadataRoute.Sitemap = articles
-    .filter(article => typeof article.slug === 'string' && article.slug.trim().length > 0)
-    .flatMap(article =>
-      LOCALES.map(lang => ({
-        url: `${SITE_URL}/${lang}/articles/${article.slug}`,
-        lastModified: now,
-        changeFrequency: ARTICLE_FREQ,
-        priority: ARTICLE_PRIORITY,
-        alternates: buildLocalizedAlternates(`/articles/${article.slug}`),
-      })),
-    );
-
-  return [...homeUrls, ...articleUrls, ...cardUrls];
+  return [...homeEntries, ...cardEntries];
 }

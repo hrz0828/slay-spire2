@@ -1,25 +1,36 @@
-const { readFile } = require('node:fs/promises');
+const { readdirSync, readFileSync } = require('node:fs');
 const path = require('node:path');
 
-const BAIDU_SITE = process.env.BAIDU_SITE || 'sts2hub.com';
+const BAIDU_SITE = process.env.BAIDU_SITE || 'yourdomain.com';
 const BAIDU_TOKEN = process.env.BAIDU_TOKEN || 'YOUR_BAIDU_TOKEN';
-const BASE_URL = 'https://sts2hub.com';
-const CARDS_FILE = path.join(process.cwd(), 'public', 'data', 'cards.json');
+const BASE_URL = 'https://yourdomain.com';
+const CARDS_DIR = path.join(process.cwd(), 'cards');
 
-async function loadCards() {
-  const raw = await readFile(CARDS_FILE, 'utf8');
-  const parsed = JSON.parse(raw);
-  if (!Array.isArray(parsed)) {
-    throw new Error('cards.json must be an array.');
+function loadCardKeys() {
+  const files = readdirSync(CARDS_DIR);
+  const keys = new Set();
+
+  for (const file of files) {
+    if (!file.endsWith('.json')) continue;
+
+    try {
+      const fullPath = path.join(CARDS_DIR, file);
+      const raw = readFileSync(fullPath, 'utf8');
+      const parsed = JSON.parse(raw);
+      const key = parsed?.card?.key;
+      if (typeof key === 'string' && key.trim().length > 0) {
+        keys.add(key.trim());
+      }
+    } catch {
+      // Ignore malformed card files.
+    }
   }
-  return parsed;
+
+  return [...keys];
 }
 
-function buildZhCardUrls(cards) {
-  return cards
-    .map(card => (typeof card?.id === 'string' ? card.id.trim() : ''))
-    .filter(Boolean)
-    .map(id => `${BASE_URL}/zh/cards/${id}`);
+function buildZhCardUrls(cardKeys) {
+  return cardKeys.map(key => `${BASE_URL}/zh/cards/${key}`);
 }
 
 async function submitToBaidu(urls) {
@@ -29,7 +40,7 @@ async function submitToBaidu(urls) {
   }
 
   if (!BAIDU_TOKEN || BAIDU_TOKEN === 'YOUR_BAIDU_TOKEN') {
-    console.warn('[baidu-submit] Missing BAIDU_TOKEN. Please set env var BAIDU_TOKEN.');
+    console.warn('[baidu-submit] Missing BAIDU_TOKEN. Set BAIDU_TOKEN environment variable first.');
     return;
   }
 
@@ -37,14 +48,12 @@ async function submitToBaidu(urls) {
     BAIDU_SITE,
   )}&token=${encodeURIComponent(BAIDU_TOKEN)}`;
 
-  const body = urls.join('\n');
-
   const response = await fetch(endpoint, {
     method: 'POST',
     headers: {
       'Content-Type': 'text/plain',
     },
-    body,
+    body: urls.join('\n'),
   });
 
   const text = await response.text();
@@ -57,7 +66,7 @@ async function submitToBaidu(urls) {
 
   if (!response.ok) {
     console.error('[baidu-submit] HTTP error:', response.status, response.statusText);
-    console.error('[baidu-submit] Response:', result);
+    console.error('[baidu-submit] response:', result);
     process.exitCode = 1;
     return;
   }
@@ -65,15 +74,15 @@ async function submitToBaidu(urls) {
   console.log('[baidu-submit] Submitted URLs:', urls.length);
   console.log('[baidu-submit] success:', result.success ?? 0);
   console.log('[baidu-submit] remain:', result.remain ?? 'N/A');
-  if (result.not_same_site || result.not_valid || result.error) {
+  if (result.error || result.not_same_site || result.not_valid) {
     console.log('[baidu-submit] detail:', result);
   }
 }
 
 async function main() {
   try {
-    const cards = await loadCards();
-    const urls = buildZhCardUrls(cards);
+    const cardKeys = loadCardKeys();
+    const urls = buildZhCardUrls(cardKeys);
     await submitToBaidu(urls);
   } catch (error) {
     console.error('[baidu-submit] Failed:', error);
