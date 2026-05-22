@@ -7,4 +7,5 @@ out
 dist
 .wrangler
 .open-next
+.claude
 cloudflare-env.d.ts

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
+import { categoryRoutes, coreArticles } from '@/lib/data/content-pyramid';
 
 type RawCardFile = {
   card?: {
@@ -8,8 +9,9 @@ type RawCardFile = {
   };
 };
 
-const SITE_URL = 'https://yourdomain.com';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://slay-spire2-guide.pages.dev';
 const LOCALES = ['zh', 'en'] as const;
+const indexRoutes = ['cards', 'relics', 'builds', 'tools'] as const;
 const CARDS_DIR = path.join(process.cwd(), 'cards');
 
 function loadCardKeys(): string[] {
@@ -54,6 +56,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
   const cardKeys = loadCardKeys();
 
+  const categoryEntries: MetadataRoute.Sitemap = categoryRoutes.flatMap(route =>
+    LOCALES.map(lang => ({
+      url: `${SITE_URL}/${lang}/${route}`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.9,
+      alternates: localizedAlternates(`/${route}`),
+    })),
+  );
+
+  const articleEntries: MetadataRoute.Sitemap = coreArticles.flatMap(article =>
+    LOCALES.map(lang => ({
+      url: `${SITE_URL}/${lang}/articles/${article.slug}`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: article.priority <= 10 ? 0.9 : 0.8,
+      alternates: localizedAlternates(`/articles/${article.slug}`),
+    })),
+  );
+
   const homeEntries: MetadataRoute.Sitemap = LOCALES.map(lang => ({
     url: `${SITE_URL}/${lang}`,
     lastModified: now,
@@ -61,6 +83,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 1.0,
     alternates: localizedAlternates(''),
   }));
+
+  const indexEntries: MetadataRoute.Sitemap = indexRoutes.flatMap(route =>
+    LOCALES.map(lang => ({
+      url: `${SITE_URL}/${lang}/${route}`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+      alternates: localizedAlternates(`/${route}`),
+    })),
+  );
 
   const cardEntries: MetadataRoute.Sitemap = cardKeys.flatMap(key =>
     LOCALES.map(lang => ({
@@ -72,5 +104,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   );
 
-  return [...homeEntries, ...cardEntries];
+  return [...homeEntries, ...categoryEntries, ...articleEntries, ...indexEntries, ...cardEntries];
 }

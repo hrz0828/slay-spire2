@@ -1,11 +1,21 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { contentCategories, coreArticles } from '@/lib/data/content-pyramid';
 import { isLocale, type Locale } from '@/lib/i18n';
 
 type Props = {
   params: Promise<{
     lang: string;
   }>;
+};
+
+type ContentPyramidContent = {
+  eyebrow: string;
+  title: string;
+  description: string;
+  coreTitle: string;
+  coreAriaLabel: string;
+  priorityLabel: string;
 };
 
 type HomeContent = {
@@ -20,14 +30,35 @@ type HomeContent = {
   keywordLabel: string;
   modulesTitle: string;
   modulesDescription: string;
-  modules: Array<{
+  modules: {
     title: string;
     description: string;
     href: string;
-  }>;
+  }[];
   intelTitle: string;
   intelItems: string[];
 };
+
+const contentPyramidContent = {
+  zh: {
+    eyebrow: 'AdSense 审核优先内容',
+    title: '从新手到高进阶的内容金字塔',
+    description:
+      '我们会优先补齐原创长篇攻略，用新手指南、职业攻略、Boss 机制和进阶策略建立可信的编辑基础；卡牌、遗物数据库与工具会作为后续辅助入口逐步完善。',
+    coreTitle: '优先核心文章',
+    coreAriaLabel: '优先核心文章列表',
+    priorityLabel: '优先级',
+  },
+  en: {
+    eyebrow: 'AdSense-ready editorial base',
+    title: 'A content pyramid from beginner to high ascension',
+    description:
+      'We are prioritizing original long-form guides first, building a credible editorial base through beginner tutorials, character guides, boss mechanics, and advanced strategy before expanding databases and tools as supporting entry points.',
+    coreTitle: 'Priority Core Articles',
+    coreAriaLabel: 'Priority core articles list',
+    priorityLabel: 'Priority',
+  },
+} satisfies Record<Locale, ContentPyramidContent>;
 
 const homeContent = {
   zh: {
@@ -220,6 +251,61 @@ export default async function HomePage({ params }: Props) {
                 </span>
               ))}
             </div>
+          </aside>
+        </div>
+      </section>
+
+      <section aria-labelledby="content-pyramid-title" className="rounded-[2rem] border border-amber-300/15 bg-[#120606]/70 p-6 shadow-[0_22px_60px_rgba(0,0,0,0.28)] sm:p-8 lg:p-10">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-start">
+          <div>
+            <p className="mb-3 inline-flex rounded-full border border-amber-300/25 bg-amber-300/10 px-3 py-1.5 text-xs font-black uppercase tracking-[0.24em] text-amber-200">
+              {contentPyramidContent[lang].eyebrow}
+            </p>
+            <h2 id="content-pyramid-title" className="max-w-3xl text-2xl font-black text-slate-100 sm:text-3xl">
+              {contentPyramidContent[lang].title}
+            </h2>
+            <p className="mt-4 max-w-3xl leading-7 text-slate-400">
+              {contentPyramidContent[lang].description}
+            </p>
+
+            <div className="mt-7 grid gap-4 sm:grid-cols-2">
+              {contentCategories.slice(0, 6).map(category => (
+                <a
+                  key={category.id}
+                  href={`/${lang}/${category.href}`}
+                  className="group rounded-2xl border border-rose-900/70 bg-black/25 p-5 transition hover:-translate-y-1 hover:border-amber-300/45 hover:bg-rose-950/35"
+                >
+                  <h3 className="text-lg font-black text-amber-100 group-hover:text-amber-200">
+                    {category.title[lang]}
+                  </h3>
+                  <p className="mt-3 text-sm leading-6 text-slate-400 group-hover:text-slate-300">
+                    {category.description[lang]}
+                  </p>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <aside className="rounded-3xl border border-rose-900/70 bg-black/30 p-5 shadow-inner shadow-black/50">
+            <h3 className="text-lg font-black text-slate-100">
+              {contentPyramidContent[lang].coreTitle}
+            </h3>
+            <nav className="mt-4 grid gap-3" aria-label={contentPyramidContent[lang].coreAriaLabel}>
+              {coreArticles.slice(0, 10).map(article => (
+                <a
+                  key={article.slug}
+                  href={`/${lang}/articles/${article.slug}`}
+                  className="group rounded-2xl border border-rose-900/55 bg-rose-950/15 p-4 transition hover:border-amber-300/40 hover:bg-rose-950/35"
+                >
+                  <p className="text-[0.68rem] font-black uppercase tracking-[0.2em] text-rose-500 group-hover:text-amber-300">
+                    {contentPyramidContent[lang].priorityLabel} {article.priority}
+                  </p>
+                  <p className="mt-2 text-sm font-bold leading-6 text-slate-200 group-hover:text-amber-100">
+                    {article.title[lang]}
+                  </p>
+                </a>
+              ))}
+            </nav>
           </aside>
         </div>
       </section>

@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { isLocale } from '@/lib/i18n';
 import { notFound } from 'next/navigation';
 import CardsFilter from './CardsFilter';
 import { loadCards } from '@/lib/data/cards';
+import { getArticlesByCategory } from '@/lib/data/content-pyramid';
 
 export const metadata: Metadata = {
   title: 'Cards',
@@ -18,6 +20,7 @@ export default async function CardsPage({
     notFound();
   }
   const cards = await loadCards();
+  const relatedArticles = getArticlesByCategory('cards').slice(0, 4);
 
   const zh = lang === 'zh';
   const priorities = zh
@@ -76,6 +79,25 @@ export default async function CardsPage({
             </li>
           ))}
         </ul>
+      </div>
+
+      <div className="rounded-lg border border-blood-900/70 bg-spire-900/70 p-6">
+        <h2 className="text-xl font-semibold text-bone-100">
+          {zh ? '卡牌攻略阅读' : 'Card Strategy Reading'}
+        </h2>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          {relatedArticles.map(article => (
+            <Link
+              key={article.slug}
+              href={`/${lang}/articles/${article.slug}`}
+              className="group rounded border border-blood-900/70 bg-spire-950/60 px-4 py-3 hover:border-amber-300/45 hover:bg-blood-950/35"
+            >
+              <span className="text-sm font-semibold text-bone-100 group-hover:text-amber-100">
+                {article.title[lang]}
+              </span>
+            </Link>
+          ))}
+        </div>
       </div>
 
       <div className="space-y-3">

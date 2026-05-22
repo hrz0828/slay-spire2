@@ -13,16 +13,22 @@ type Props = {
 
 const navItems = {
   zh: [
+    { label: '新手指南', href: 'guides' },
+    { label: '职业攻略', href: 'characters' },
     { label: '卡牌图鉴', href: 'cards' },
     { label: '遗物数据', href: 'relics' },
-    { label: '强度天梯榜', href: 'builds' },
-    { label: '硬核攻略', href: 'tools' },
+    { label: '通关流派', href: 'builds' },
+    { label: 'Boss 机制', href: 'bosses' },
+    { label: '进阶策略', href: 'strategy' },
   ],
   en: [
+    { label: 'Beginner guides', href: 'guides' },
+    { label: 'Characters', href: 'characters' },
     { label: 'Cards', href: 'cards' },
-    { label: 'Artifacts', href: 'relics' },
-    { label: 'Tier List', href: 'builds' },
-    { label: 'Guides', href: 'tools' },
+    { label: 'Relics', href: 'relics' },
+    { label: 'Builds', href: 'builds' },
+    { label: 'Bosses', href: 'bosses' },
+    { label: 'Strategy', href: 'strategy' },
   ],
 } satisfies Record<Locale, Array<{ label: string; href: string }>>;
 
