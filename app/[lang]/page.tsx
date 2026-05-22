@@ -1,6 +1,10 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { contentCategories, coreArticles } from '@/lib/data/content-pyramid';
+import {
+  contentCategories,
+  coreArticles,
+  getCategory,
+} from '@/lib/data/content-pyramid';
 import { isLocale, type Locale } from '@/lib/i18n';
 
 type Props = {
@@ -15,7 +19,7 @@ type ContentPyramidContent = {
   description: string;
   coreTitle: string;
   coreAriaLabel: string;
-  priorityLabel: string;
+  recommendationLabel: string;
 };
 
 type HomeContent = {
@@ -45,18 +49,18 @@ const contentPyramidContent = {
     title: '从新手到高进阶的内容金字塔',
     description:
       '我们会优先补齐原创长篇攻略，用新手指南、职业攻略、Boss 机制和进阶策略建立可信的编辑基础；卡牌、遗物数据库与工具会作为后续辅助入口逐步完善。',
-    coreTitle: '优先核心文章',
-    coreAriaLabel: '优先核心文章列表',
-    priorityLabel: '优先级',
+    coreTitle: '新手推荐核心文章',
+    coreAriaLabel: '新手推荐核心文章列表',
+    recommendationLabel: '新手推荐',
   },
   en: {
     eyebrow: 'AdSense-ready editorial base',
     title: 'A content pyramid from beginner to high ascension',
     description:
       'We are prioritizing original long-form guides first, building a credible editorial base through beginner tutorials, character guides, boss mechanics, and advanced strategy before expanding databases and tools as supporting entry points.',
-    coreTitle: 'Priority Core Articles',
-    coreAriaLabel: 'Priority core articles list',
-    priorityLabel: 'Priority',
+    coreTitle: 'Beginner Recommended Articles',
+    coreAriaLabel: 'Beginner recommended articles list',
+    recommendationLabel: 'Beginner pick',
   },
 } satisfies Record<Locale, ContentPyramidContent>;
 
@@ -87,7 +91,7 @@ const homeContent = {
       },
       {
         title: '神装遗物数据',
-        description: '整理遗物收益、触发场景与构筑联动，方便跑图时判断优先级。',
+        description: '整理遗物收益、触发场景与构筑联动，方便跑图时判断先拿什么、围绕什么打。',
         href: 'relics',
       },
       {
@@ -298,7 +302,7 @@ export default async function HomePage({ params }: Props) {
                   className="group rounded-2xl border border-rose-900/55 bg-rose-950/15 p-4 transition hover:border-amber-300/40 hover:bg-rose-950/35"
                 >
                   <p className="text-[0.68rem] font-black uppercase tracking-[0.2em] text-rose-500 group-hover:text-amber-300">
-                    {contentPyramidContent[lang].priorityLabel} {article.priority}
+                    {contentPyramidContent[lang].recommendationLabel} {String(article.priority).padStart(2, '0')} · {getCategory(article.category).title[lang]}
                   </p>
                   <p className="mt-2 text-sm font-bold leading-6 text-slate-200 group-hover:text-amber-100">
                     {article.title[lang]}

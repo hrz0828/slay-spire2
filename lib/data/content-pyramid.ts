@@ -42,7 +42,7 @@ export type CoreArticle = {
 export const contentCategories: ContentCategory[] = [
   {
     id: 'guides',
-    href: '',
+    href: 'guides',
     title: { zh: '新手指南', en: 'Beginner Guides' },
     description: {
       zh: '从核心规则、地图路线到第一套通关卡组，帮助新玩家建立稳定的学习路径。',
@@ -67,7 +67,7 @@ export const contentCategories: ContentCategory[] = [
   },
   {
     id: 'characters',
-    href: '',
+    href: 'characters',
     title: { zh: '职业/角色攻略', en: 'Characters & Classes' },
     description: {
       zh: '理解每个角色的资源系统、常见打法和上手难度，选择适合当前水平的职业。',
@@ -77,8 +77,8 @@ export const contentCategories: ContentCategory[] = [
       {
         title: { zh: '角色总览', en: 'Character Overview' },
         items: {
-          zh: ['起始遗物与基础牌组差异', '角色专属机制与成长曲线', '新旧角色的学习优先级'],
-          en: ['Starting relic and starter deck differences', 'Class mechanics and scaling curves', 'Learning priority for returning and new characters'],
+          zh: ['起始遗物与基础牌组差异', '角色专属机制与成长曲线', '新旧角色的上手顺序'],
+          en: ['Starting relic and starter deck differences', 'Class mechanics and scaling curves', 'Learning order for returning and new characters'],
         },
       },
       {
@@ -92,7 +92,7 @@ export const contentCategories: ContentCategory[] = [
   },
   {
     id: 'cards',
-    href: '',
+    href: 'cards',
     title: { zh: '卡牌图鉴', en: 'Card Database' },
     description: {
       zh: '查询卡牌效果、稀有度与实际选牌思路，把单卡强度放回当前卡组环境判断。',
@@ -117,7 +117,7 @@ export const contentCategories: ContentCategory[] = [
   },
   {
     id: 'relics',
-    href: '',
+    href: 'relics',
     title: { zh: '遗物数据库', en: 'Relic Database' },
     description: {
       zh: '了解遗物触发条件、收益类型和围绕遗物改变打法的时机。',
@@ -142,7 +142,7 @@ export const contentCategories: ContentCategory[] = [
   },
   {
     id: 'builds',
-    href: '',
+    href: 'builds',
     title: { zh: '通关流派', en: 'Builds & Archetypes' },
     description: {
       zh: '以通关目标为中心梳理常见流派、成型条件和不同阶段的转型策略。',
@@ -167,7 +167,7 @@ export const contentCategories: ContentCategory[] = [
   },
   {
     id: 'bosses',
-    href: '',
+    href: 'bosses',
     title: { zh: 'Boss 与敌人机制', en: 'Bosses & Enemies' },
     description: {
       zh: '拆解敌人行动模式、关键回合和备战清单，减少被突然击杀的情况。',
@@ -192,7 +192,7 @@ export const contentCategories: ContentCategory[] = [
   },
   {
     id: 'strategy',
-    href: '',
+    href: 'strategy',
     title: { zh: '进阶策略', en: 'Advanced Strategy' },
     description: {
       zh: '深入讲解牌组运转、资源管理和稳定通关所需的长期决策能力。',
@@ -217,7 +217,7 @@ export const contentCategories: ContentCategory[] = [
   },
   {
     id: 'tools',
-    href: '',
+    href: 'tools',
     title: { zh: '工具与计算器', en: 'Tools & Calculators' },
     description: {
       zh: '提供卡牌、遗物和构筑相关的实用工具，帮助玩家更快完成局内判断。',
@@ -242,7 +242,7 @@ export const contentCategories: ContentCategory[] = [
   },
   {
     id: 'resources',
-    href: '',
+    href: 'resources',
     title: { zh: '资源中心', en: 'Resources' },
     description: {
       zh: '集中整理术语、学习清单、索引页和站内导航，降低查找成本。',
@@ -267,7 +267,7 @@ export const contentCategories: ContentCategory[] = [
   },
   {
     id: 'news',
-    href: '',
+    href: 'news',
     title: { zh: '新闻与版本更新', en: 'News & Updates' },
     description: {
       zh: '跟踪版本改动、平衡调整和站点内容更新，帮助玩家理解环境变化。',
@@ -321,7 +321,7 @@ const articleBlueprints: ArticleBlueprint[] = [
   { slug: 'essential-cards-to-understand', category: 'cards', priority: 19, title: { zh: '必须理解的 20 张核心卡牌：从单卡强度到卡组定位', en: '20 Essential Cards to Understand: From Raw Power to Deck Identity' } },
   { slug: 'cards-beginners-misuse', category: 'cards', priority: 20, title: { zh: '新手最容易误用的卡牌：看起来很强但可能拖垮卡组', en: 'Cards Beginners Misuse: Powerful-Looking Picks That Can Weaken Your Deck' } },
   { slug: 'relic-picking-guide', category: 'relics', priority: 21, title: { zh: '遗物选择指南：什么遗物值得围绕它改变打法？', en: 'Relic Picking Guide: Which Relics Are Worth Building Around?' } },
-  { slug: 'best-beginner-relics', category: 'relics', priority: 22, title: { zh: '新手最强遗物推荐：稳定通关优先级排行', en: 'Best Relics for Beginners: Stability-Focused Ranking for First Clears' } },
+  { slug: 'best-beginner-relics', category: 'relics', priority: 22, title: { zh: '新手最强遗物推荐：稳定通关推荐排行', en: 'Best Relics for Beginners: Stability-Focused Ranking for First Clears' } },
   { slug: 'choose-boss-relics', category: 'relics', priority: 23, title: { zh: 'Boss 遗物怎么选？能量、限制与卡组需求的权衡', en: 'How to Choose Boss Relics: Energy, Downsides, and Deck Needs' } },
   { slug: 'relic-card-synergy', category: 'relics', priority: 24, title: { zh: '遗物与卡牌协同入门：如何把小优势滚成胜势', en: 'Relic and Card Synergy Guide: Turning Small Advantages into Winning Runs' } },
   { slug: 'act-1-boss-guide', category: 'bosses', priority: 25, title: { zh: '第一层 Boss 完整攻略：行动模式、克制思路与备战清单', en: 'Act 1 Boss Guide: Move Patterns, Counterplay, and Preparation Checklist' } },
@@ -813,52 +813,88 @@ const articleSectionSeeds: Record<string, ArticleSectionSeed> = {
   },
 };
 
-function formatSectionBody(intro: string, items: string[]): string {
-  return `${intro} ${items.join('；')}。`;
-}
-
 function buildSections(article: ArticleBlueprint): CoreArticle['sections'] {
   const seed = articleSectionSeeds[article.slug];
+  const category = getCategory(article.category);
 
   if (!seed) {
     throw new Error(`Missing article section seed: ${article.slug}`);
   }
 
+  const zhDecisionText = seed.zh.decisions.join('；');
+  const zhPracticeText = seed.zh.practice.join('；');
+  const zhReviewText = seed.zh.review.join('；');
+  const enDecisionText = seed.en.decisions.join('; ');
+  const enPracticeText = seed.en.practice.join('; ');
+  const enReviewText = seed.en.review.join('; ');
+
   return {
     zh: [
       {
-        heading: '阅读目标',
-        body: seed.zh.intent,
+        heading: '这篇攻略适合谁',
+        body: `${seed.zh.intent} 如果你正在查${category.title.zh}，建议先把这篇当作一局游戏前的检查表，而不是只看结论。攻略中的判断顺序更适合新手和回归玩家，用来减少前两层突然崩盘、选牌方向摇摆和 Boss 前才发现短板的情况。`,
+      },
+      {
+        heading: '先建立正确目标',
+        body: `《杀戮尖塔 2》的稳定通关不是每次都追求最华丽的组合，而是让当前卡组持续回答下一场战斗的问题。阅读本篇时，可以把目标拆成三层：先活过眼前战斗，再让卡组拥有清晰输出或防御计划，最后才考虑高上限成长。这样做的好处是每一次拿牌、删牌、升级和路线选择都有依据。`,
       },
       {
         heading: '关键判断',
-        body: formatSectionBody('实战中优先确认这些问题：', seed.zh.decisions),
+        body: `实战中优先确认这些问题：${zhDecisionText}。这些判断不需要等卡组完全成型才做，越早确认越能避免后面被迫补救。尤其在普通战奖励、精英路线和商店之间选择时，先问“这能不能提高下一场关键战斗胜率”，通常比单纯追求稀有度或理论上限更可靠。`,
+      },
+      {
+        heading: '推荐执行顺序',
+        body: `第一步，检查当前最短板的能力，通常是伤害、防御、过牌、能量或成长其中之一。第二步，只选择能直接补短板或明显增强已有核心的奖励。第三步，在营火和商店把资源花到下一场高风险战斗上。第四步，进入下一层后重新评估，不要让上一层的成功经验固定住整局思路。`,
       },
       {
         heading: '局内练习',
-        body: formatSectionBody('下一局可以直接练习：', seed.zh.practice),
+        body: `下一局可以直接练习：${zhPracticeText}。练习时不要同时改太多习惯，最好每局只盯一个主题，例如只练路线风险、只练跳牌，或只练 Boss 前的药水保留。这样复盘时能知道胜负变化来自哪个决定，而不是把所有结果都归因于运气。`,
+      },
+      {
+        heading: '常见误区',
+        body: `新手最容易把“看起来很强”误认为“现在需要”。一张高费牌、一个复杂组合或一条多精英路线，只有在当前资源能支撑时才是优势。遇到诱人的奖励时，先把它放进最差的一手牌里想一遍：如果它不能帮助你活过危险回合，或者会稀释已经顺畅的循环，就应该降低期待。`,
       },
       {
         heading: '复盘清单',
-        body: formatSectionBody('失败后重点检查：', seed.zh.review),
+        body: `失败后重点检查：${zhReviewText}。复盘时建议按路线、选牌、战斗三个维度记录原因：路线问题通常表现为血量和营火不足，选牌问题表现为关键牌抽不到或打不出，战斗问题则表现为药水太晚使用、击杀回合估算错误或防御过度拖长战斗。`,
+      },
+      {
+        heading: '下一步阅读',
+        body: `读完后可以回到${category.title.zh}继续查同类文章，再结合卡牌图鉴、遗物数据库和通关流派页面验证具体卡牌与遗物的价值。真正能提高通关率的不是记住某个固定答案，而是把本篇的检查顺序带进每一次奖励选择和每一场关键战斗。`,
       },
     ],
     en: [
       {
-        heading: 'Reading Goal',
-        body: seed.en.intent,
+        heading: 'Who This Guide Helps',
+        body: `${seed.en.intent} If you are browsing ${category.title.en.toLowerCase()}, use this page as a pre-run checklist rather than a list of isolated answers. The order is written for new and returning players who want fewer early collapses, clearer drafts, and fewer boss fights entered with an unsolved weakness.`,
+      },
+      {
+        heading: 'Set the Right Goal First',
+        body: 'Consistent Slay the Spire 2 runs are not built by chasing the flashiest combo every time. The practical goal is to answer the next fight, then give the deck a clear damage or block plan, and only then add long-term scaling. That framing makes picks, skips, removals, upgrades, shops, and routes easier to compare.',
       },
       {
         heading: 'Key Decisions',
-        body: formatSectionBody('In real runs, check these first:', seed.en.decisions),
+        body: `In real runs, check these first: ${enDecisionText}. These decisions matter before the deck is complete. When choosing between a card reward, elite route, shop, or campfire, ask whether the choice improves the next important fight instead of judging only rarity or theoretical ceiling.`,
+      },
+      {
+        heading: 'Recommended Order',
+        body: 'First, name the deck capability that is currently weakest: damage, block, draw, energy, or scaling. Second, take rewards that directly cover that gap or strengthen a real existing core. Third, spend campfires and shop gold on the next high-risk fight. Fourth, reassess at the start of every act instead of forcing last act’s plan.',
       },
       {
         heading: 'In-Run Practice',
-        body: formatSectionBody('Use the next run to practice:', seed.en.practice),
+        body: `Use the next run to practice: ${enPracticeText}. Do not change every habit at once. Pick one focus per run, such as route risk, skipping, potion timing, or boss preparation. That makes the review useful because you can connect the result to a specific decision pattern.`,
+      },
+      {
+        heading: 'Common Trap',
+        body: 'The most common beginner trap is confusing “powerful-looking” with “needed now.” An expensive card, a complex package, or a greedy route is only an advantage when the current resources can support it. Before taking a tempting reward, imagine it in a bad hand and decide whether it helps you survive the dangerous turn.',
       },
       {
         heading: 'Review Checklist',
-        body: formatSectionBody('After a loss, review:', seed.en.review),
+        body: `After a loss, review: ${enReviewText}. Sort the cause into route, drafting, and combat. Route problems usually show up as low HP or missing campfire options. Drafting problems show up as key cards being hard to find or play. Combat problems often come from late potion use, bad lethal math, or blocking so much that the fight lasts too long.`,
+      },
+      {
+        heading: 'What To Read Next',
+        body: `After this page, return to ${category.title.en.toLowerCase()} for related guides, then use the card database, relic database, and build pages to test specific card and relic choices. The durable improvement is not memorizing one answer; it is carrying this checklist into every reward screen and key fight.`,
       },
     ],
   };

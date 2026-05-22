@@ -44,7 +44,7 @@ export function CategoryLanding({ categoryId, lang }: CategoryLandingProps) {
 
       <section aria-labelledby={`${categoryId}-priority-articles`} className="rounded-2xl border border-blood-900/70 bg-spire-900/70 p-6">
         <h2 id={`${categoryId}-priority-articles`} className="text-2xl font-black text-bone-100">
-          {zh ? '优先阅读文章' : 'Priority Articles'}
+          {zh ? '本栏目新手推荐' : 'Beginner Reading Order'}
         </h2>
         <div className="mt-5 grid gap-4">
           {articles.map(article => (
@@ -54,7 +54,7 @@ export function CategoryLanding({ categoryId, lang }: CategoryLandingProps) {
               className="group rounded-xl border border-blood-900/70 bg-spire-950/65 p-5 hover:border-amber-300/45 hover:bg-blood-950/35"
             >
               <p className="text-xs font-black uppercase tracking-[0.22em] text-ember-300">
-                {zh ? '优先级' : 'Priority'} {article.priority}
+                {zh ? '阅读顺序' : 'Reading order'} {String(article.priority).padStart(2, '0')} · {category.title[lang]}
               </p>
               <h3 className="mt-3 text-lg font-bold text-bone-100 group-hover:text-amber-100">
                 {article.title[lang]}

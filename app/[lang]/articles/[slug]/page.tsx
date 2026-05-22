@@ -21,7 +21,8 @@ const articleLabels = {
     related: '同类延伸阅读',
     categories: '继续探索主题',
     categoryCta: '返回分类',
-    priority: '优先级',
+    recommendation: '新手推荐',
+    readingOrder: '阅读顺序',
     sectionLabel: '章节',
   },
   en: {
@@ -30,7 +31,8 @@ const articleLabels = {
     related: 'Related Articles',
     categories: 'Explore More Topics',
     categoryCta: 'Back to Category',
-    priority: 'Priority',
+    recommendation: 'Beginner pick',
+    readingOrder: 'Reading order',
     sectionLabel: 'Section',
   },
 } satisfies Record<Locale, Record<string, string>>;
@@ -124,7 +126,7 @@ export default async function ArticlePage({ params }: Props) {
                 {category.title[lang]}
               </Link>
               <span className="rounded-full border border-blood-700 bg-spire-950/70 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-bone-300">
-                {labels.priority} {article.priority}
+                {labels.recommendation} {String(article.priority).padStart(2, '0')}
               </span>
             </div>
 
@@ -184,7 +186,7 @@ export default async function ArticlePage({ params }: Props) {
                 className="group block rounded-xl border border-blood-900/70 bg-spire-950/65 p-4 hover:border-amber-300/45 hover:bg-blood-950/35"
               >
                 <p className="text-xs font-black uppercase tracking-[0.18em] text-ember-300">
-                  {labels.priority} {item.priority}
+                  {labels.readingOrder} {String(item.priority).padStart(2, '0')} · {category.title[lang]}
                 </p>
                 <h3 className="mt-2 text-sm font-bold leading-6 text-bone-100 group-hover:text-amber-100">
                   {item.title[lang]}
