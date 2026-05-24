@@ -2,6 +2,8 @@ import type { MetadataRoute } from 'next';
 import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { categoryRoutes, coreArticles } from '@/lib/data/content-pyramid';
+import { infoPages } from '@/lib/data/site-info';
+import { defaultLocale, type Locale } from '@/lib/i18n';
 
 type RawCardFile = {
   card?: {
@@ -43,11 +45,19 @@ function loadCardKeys(): string[] {
   return Array.from(keys);
 }
 
+function publicUrl(lang: Locale, routePath: string) {
+  if (lang === defaultLocale) {
+    return `${SITE_URL}${routePath || '/'}`;
+  }
+
+  return `${SITE_URL}/${lang}${routePath}`;
+}
+
 function localizedAlternates(routePath: string) {
   return {
     languages: {
-      zh: `${SITE_URL}/zh${routePath}`,
-      en: `${SITE_URL}/en${routePath}`,
+      zh: publicUrl('zh', routePath),
+      en: publicUrl('en', routePath),
     },
   };
 }
@@ -58,7 +68,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const categoryEntries: MetadataRoute.Sitemap = categoryRoutes.flatMap(route =>
     LOCALES.map(lang => ({
-      url: `${SITE_URL}/${lang}/${route}`,
+      url: publicUrl(lang, `/${route}`),
       lastModified: now,
       changeFrequency: 'weekly',
       priority: 0.9,
@@ -68,7 +78,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const articleEntries: MetadataRoute.Sitemap = coreArticles.flatMap(article =>
     LOCALES.map(lang => ({
-      url: `${SITE_URL}/${lang}/articles/${article.slug}`,
+      url: publicUrl(lang, `/articles/${article.slug}`),
       lastModified: now,
       changeFrequency: 'monthly',
       priority: article.priority <= 10 ? 0.9 : 0.8,
@@ -77,7 +87,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   );
 
   const homeEntries: MetadataRoute.Sitemap = LOCALES.map(lang => ({
-    url: `${SITE_URL}/${lang}`,
+    url: publicUrl(lang, ''),
     lastModified: now,
     changeFrequency: 'daily',
     priority: 1.0,
@@ -86,7 +96,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const indexEntries: MetadataRoute.Sitemap = indexRoutes.flatMap(route =>
     LOCALES.map(lang => ({
-      url: `${SITE_URL}/${lang}/${route}`,
+      url: publicUrl(lang, `/${route}`),
       lastModified: now,
       changeFrequency: 'weekly',
       priority: 0.8,
@@ -94,9 +104,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   );
 
+  const infoEntries: MetadataRoute.Sitemap = infoPages.flatMap(page =>
+    LOCALES.map(lang => ({
+      url: publicUrl(lang, `/${page.slug}`),
+      lastModified: new Date(page.updatedAt),
+      changeFrequency: 'yearly',
+      priority: page.slug === 'privacy-policy' || page.slug === 'contact' ? 0.7 : 0.6,
+      alternates: localizedAlternates(`/${page.slug}`),
+    })),
+  );
+
   const cardEntries: MetadataRoute.Sitemap = cardKeys.flatMap(key =>
     LOCALES.map(lang => ({
-      url: `${SITE_URL}/${lang}/cards/${key}`,
+      url: publicUrl(lang, `/cards/${key}`),
       lastModified: now,
       changeFrequency: 'weekly',
       priority: 0.8,
@@ -104,5 +124,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
   );
 
-  return [...homeEntries, ...categoryEntries, ...articleEntries, ...indexEntries, ...cardEntries];
+  return [
+    ...homeEntries,
+    ...categoryEntries,
+    ...articleEntries,
+    ...indexEntries,
+    ...infoEntries,
+    ...cardEntries,
+  ];
 }

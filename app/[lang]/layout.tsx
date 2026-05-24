@@ -2,7 +2,13 @@ import type { Metadata } from 'next';
 import Script from 'next/script';
 import { notFound } from 'next/navigation';
 import '../globals.css';
-import { getDictionary, isLocale, locales, type Locale } from '@/lib/i18n';
+import {
+  getDictionary,
+  isLocale,
+  locales,
+  type Locale,
+} from '@/lib/i18n';
+import { localizedAlternates, localizedPath } from '@/lib/routes';
 
 type Props = {
   children: React.ReactNode;
@@ -42,6 +48,23 @@ const siteTagline = {
   en: 'Guide',
 } satisfies Record<Locale, string>;
 
+const footerLinks = {
+  zh: [
+    { label: '关于我们', href: 'about' },
+    { label: '联系我们', href: 'contact' },
+    { label: '隐私政策', href: 'privacy-policy' },
+    { label: '使用条款', href: 'terms' },
+    { label: '编辑原则', href: 'editorial-policy' },
+  ],
+  en: [
+    { label: 'About', href: 'about' },
+    { label: 'Contact', href: 'contact' },
+    { label: 'Privacy Policy', href: 'privacy-policy' },
+    { label: 'Terms', href: 'terms' },
+    { label: 'Editorial Policy', href: 'editorial-policy' },
+  ],
+} satisfies Record<Locale, Array<{ label: string; href: string }>>;
+
 export function generateStaticParams() {
   return locales.map(lang => ({ lang }));
 }
@@ -65,11 +88,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     description: dict.meta.description,
     alternates: {
-      canonical: `/${lang}`,
-      languages: {
-        zh: '/zh',
-        en: '/en',
-      },
+      canonical: localizedPath(lang),
+      languages: localizedAlternates(),
     },
     openGraph: {
       type: 'website',
@@ -77,7 +97,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: dict.meta.siteName,
       title: dict.meta.title,
       description: dict.meta.description,
-      url: `/${lang}`,
+      url: localizedPath(lang),
     },
     twitter: {
       card: 'summary_large_image',
@@ -123,7 +143,7 @@ export default async function LangLayout({ children, params }: Props) {
           >
             <input id="nav-menu-toggle" type="checkbox" className="peer sr-only" />
             <div className="flex min-h-20 items-center justify-between gap-4">
-              <a href={`/${lang}`} className="group flex items-center gap-3">
+              <a href={localizedPath(lang)} className="group flex items-center gap-3">
                 <span className="relative grid h-11 w-11 place-items-center overflow-hidden rounded-xl border border-amber-300/30 bg-gradient-to-br from-rose-950 via-[#2a0808] to-black shadow-[0_0_28px_rgba(225,29,72,0.32)]">
                   <span className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(252,211,77,0.36),transparent_2rem)]" />
                   <span className="relative text-lg font-black text-amber-200 drop-shadow-[0_0_10px_rgba(251,191,36,0.65)]">
@@ -144,7 +164,7 @@ export default async function LangLayout({ children, params }: Props) {
                 {navItems[lang].map(item => (
                   <a
                     key={item.href}
-                    href={`/${lang}/${item.href}`}
+                    href={localizedPath(lang, item.href)}
                     className="rounded-full border border-transparent px-4 py-2 text-sm font-semibold text-slate-300 transition hover:border-amber-300/30 hover:bg-rose-950/40 hover:text-amber-200"
                   >
                     {item.label}
@@ -154,7 +174,7 @@ export default async function LangLayout({ children, params }: Props) {
 
               <div className="hidden items-center gap-3 lg:flex">
                 <a
-                  href={`/${alternateLang}`}
+                  href={localizedPath(alternateLang)}
                   aria-label={lang === 'zh' ? 'Switch to English' : '切换到中文'}
                   className="group relative flex h-10 w-20 items-center rounded-full border border-amber-300/25 bg-black/45 p-1 shadow-inner shadow-black/70 transition hover:border-amber-300/55"
                 >
@@ -191,7 +211,7 @@ export default async function LangLayout({ children, params }: Props) {
                   {navItems[lang].map(item => (
                     <a
                       key={item.href}
-                      href={`/${lang}/${item.href}`}
+                      href={localizedPath(lang, item.href)}
                       className="rounded-xl border border-transparent px-4 py-3 text-sm font-semibold text-slate-200 transition hover:border-amber-300/30 hover:bg-rose-950/50 hover:text-amber-200"
                     >
                       {item.label}
@@ -199,7 +219,7 @@ export default async function LangLayout({ children, params }: Props) {
                   ))}
                 </div>
                 <a
-                  href={`/${alternateLang}`}
+                  href={localizedPath(alternateLang)}
                   className="mt-3 flex items-center justify-between rounded-xl border border-amber-300/20 bg-rose-950/30 px-4 py-3 text-sm font-bold text-amber-100 transition hover:border-amber-300/50"
                 >
                   <span>{lang === 'zh' ? '切换语言' : 'Language'}</span>
@@ -216,10 +236,26 @@ export default async function LangLayout({ children, params }: Props) {
           {children}
         </main>
 
-        <footer className="border-t border-rose-950/80 bg-black/25 px-4 py-7 text-center text-sm text-slate-500">
-          <span className="bg-gradient-to-r from-slate-500 via-slate-300 to-slate-500 bg-clip-text text-transparent">
-            {dict.footer.copyright}
-          </span>
+        <footer className="border-t border-rose-950/80 bg-black/25 px-4 py-8 text-sm text-slate-500">
+          <div className="mx-auto flex max-w-7xl flex-col items-center gap-5 text-center">
+            <nav
+              aria-label={lang === 'zh' ? '站点信息' : 'Site information'}
+              className="flex flex-wrap justify-center gap-x-5 gap-y-2"
+            >
+              {footerLinks[lang].map(item => (
+                <a
+                  key={item.href}
+                  href={localizedPath(lang, item.href)}
+                  className="font-semibold text-slate-400 hover:text-amber-200"
+                >
+                  {item.label}
+                </a>
+              ))}
+            </nav>
+            <span className="max-w-3xl bg-gradient-to-r from-slate-500 via-slate-300 to-slate-500 bg-clip-text text-transparent">
+              {dict.footer.copyright}
+            </span>
+          </div>
         </footer>
       </body>
     </html>

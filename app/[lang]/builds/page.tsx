@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { loadCards } from '@/lib/data/cards';
 import { buildTierListData } from '@/lib/data/tier-list';
 import { getArticlesByCategory } from '@/lib/data/content-pyramid';
+import { localizedPath } from '@/lib/routes';
 import TierListBoard from './TierListBoard';
 
 export const metadata: Metadata = {
@@ -47,7 +48,7 @@ export default async function BuildsPage({
           {guideLinks.map(article => (
             <Link
               key={article.slug}
-              href={`/${lang}/articles/${article.slug}`}
+              href={localizedPath(lang, `articles/${article.slug}`)}
               className="group rounded border border-blood-900/70 bg-spire-950/60 px-4 py-3 hover:border-amber-300/45 hover:bg-blood-950/35"
             >
               <span className="text-sm font-semibold text-bone-100 group-hover:text-amber-100">

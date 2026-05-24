@@ -9,6 +9,7 @@ import {
   getCoreArticle,
 } from '@/lib/data/content-pyramid';
 import { isLocale, locales, type Locale } from '@/lib/i18n';
+import { localizedAlternates, localizedPath } from '@/lib/routes';
 
 type Props = {
   params: Promise<{ lang: string; slug: string }>;
@@ -61,7 +62,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = article.title[lang];
   const description = article.description[lang];
   const keywords = article.keywords[lang];
-  const canonical = `/${lang}/articles/${article.slug}`;
+  const route = `articles/${article.slug}`;
+  const canonical = localizedPath(lang, route);
 
   return {
     title,
@@ -69,10 +71,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     keywords,
     alternates: {
       canonical,
-      languages: {
-        zh: `/zh/articles/${article.slug}`,
-        en: `/en/articles/${article.slug}`,
-      },
+      languages: localizedAlternates(route),
     },
     openGraph: {
       type: 'article',
@@ -120,7 +119,7 @@ export default async function ArticlePage({ params }: Props) {
           <div className="relative z-10 space-y-6">
             <div className="flex flex-wrap items-center gap-3">
               <Link
-                href={`/${lang}/${category.href}`}
+                href={localizedPath(lang, category.href)}
                 className="rounded-full border border-amber-300/25 bg-amber-300/10 px-4 py-2 text-xs font-black uppercase tracking-[0.22em] text-ember-200 hover:border-amber-300/55 hover:text-amber-100"
               >
                 {category.title[lang]}
@@ -182,7 +181,7 @@ export default async function ArticlePage({ params }: Props) {
             {relatedArticles.map(item => (
               <Link
                 key={item.slug}
-                href={`/${lang}/articles/${item.slug}`}
+                href={localizedPath(lang, `articles/${item.slug}`)}
                 className="group block rounded-xl border border-blood-900/70 bg-spire-950/65 p-4 hover:border-amber-300/45 hover:bg-blood-950/35"
               >
                 <p className="text-xs font-black uppercase tracking-[0.18em] text-ember-300">
@@ -202,7 +201,7 @@ export default async function ArticlePage({ params }: Props) {
             {siblingCategories.map(item => (
               <Link
                 key={item.id}
-                href={`/${lang}/${item.href}`}
+                href={localizedPath(lang, item.href)}
                 className="block rounded-xl border border-blood-900/70 bg-spire-950/65 p-4 hover:border-amber-300/45 hover:bg-blood-950/35"
               >
                 <span className="text-sm font-bold text-bone-100">{item.title[lang]}</span>
@@ -213,7 +212,7 @@ export default async function ArticlePage({ params }: Props) {
         </section>
 
         <Link
-          href={`/${lang}/${category.href}`}
+          href={localizedPath(lang, category.href)}
           className="block rounded-2xl border border-amber-300/25 bg-amber-300/10 px-5 py-4 text-center text-sm font-black text-amber-100 hover:border-amber-300/60 hover:bg-amber-300/15"
         >
           {labels.categoryCta}: {category.title[lang]}

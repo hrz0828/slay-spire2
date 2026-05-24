@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { Locale } from '@/lib/i18n';
 import type { ContentCategoryId } from '@/lib/data/content-pyramid';
 import { getArticlesByCategory, getCategory } from '@/lib/data/content-pyramid';
+import { localizedPath } from '@/lib/routes';
 
 type CategoryLandingProps = {
   categoryId: ContentCategoryId;
@@ -50,7 +51,7 @@ export function CategoryLanding({ categoryId, lang }: CategoryLandingProps) {
           {articles.map(article => (
             <Link
               key={article.slug}
-              href={`/${lang}/articles/${article.slug}`}
+              href={localizedPath(lang, `articles/${article.slug}`)}
               className="group rounded-xl border border-blood-900/70 bg-spire-950/65 p-5 hover:border-amber-300/45 hover:bg-blood-950/35"
             >
               <p className="text-xs font-black uppercase tracking-[0.22em] text-ember-300">

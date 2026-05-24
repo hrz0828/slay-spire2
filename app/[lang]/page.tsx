@@ -6,6 +6,7 @@ import {
   getCategory,
 } from '@/lib/data/content-pyramid';
 import { isLocale, type Locale } from '@/lib/i18n';
+import { localizedAlternates, localizedPath } from '@/lib/routes';
 
 type Props = {
   params: Promise<{
@@ -175,11 +176,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: content.description,
     keywords: content.keywords,
     alternates: {
-      canonical: `/${lang}`,
+      canonical: localizedPath(lang),
       languages: {
-        zh: '/zh',
-        en: '/en',
-        'x-default': '/zh',
+        ...localizedAlternates(),
+        'x-default': localizedPath('zh'),
       },
     },
     openGraph: {
@@ -188,7 +188,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       alternateLocale: lang === 'zh' ? ['en_US'] : ['zh_CN'],
       title: content.title,
       description: content.description,
-      url: `/${lang}`,
+      url: localizedPath(lang),
     },
     twitter: {
       card: 'summary_large_image',
@@ -227,13 +227,13 @@ export default async function HomePage({ params }: Props) {
 
             <div className="mt-8 flex flex-wrap gap-3">
               <a
-                href={`/${lang}/cards`}
+                href={localizedPath(lang, 'cards')}
                 className="rounded-full bg-gradient-to-r from-amber-200 to-yellow-500 px-5 py-3 text-sm font-black text-[#1b0b05] shadow-[0_0_28px_rgba(245,158,11,0.35)] hover:scale-[1.02]"
               >
                 {content.primaryCta}
               </a>
               <a
-                href={`/${lang}/builds`}
+                href={localizedPath(lang, 'builds')}
                 className="rounded-full border border-rose-500/50 bg-rose-950/40 px-5 py-3 text-sm font-bold text-rose-100 hover:border-amber-300/60 hover:text-amber-100"
               >
                 {content.secondaryCta}
@@ -276,7 +276,7 @@ export default async function HomePage({ params }: Props) {
               {contentCategories.slice(0, 6).map(category => (
                 <a
                   key={category.id}
-                  href={`/${lang}/${category.href}`}
+                  href={localizedPath(lang, category.href)}
                   className="group rounded-2xl border border-rose-900/70 bg-black/25 p-5 transition hover:-translate-y-1 hover:border-amber-300/45 hover:bg-rose-950/35"
                 >
                   <h3 className="text-lg font-black text-amber-100 group-hover:text-amber-200">
@@ -298,7 +298,7 @@ export default async function HomePage({ params }: Props) {
               {coreArticles.slice(0, 10).map(article => (
                 <a
                   key={article.slug}
-                  href={`/${lang}/articles/${article.slug}`}
+                  href={localizedPath(lang, `articles/${article.slug}`)}
                   className="group rounded-2xl border border-rose-900/55 bg-rose-950/15 p-4 transition hover:border-amber-300/40 hover:bg-rose-950/35"
                 >
                   <p className="text-[0.68rem] font-black uppercase tracking-[0.2em] text-rose-500 group-hover:text-amber-300">
@@ -326,7 +326,7 @@ export default async function HomePage({ params }: Props) {
           {content.modules.map(module => (
             <a
               key={module.href}
-              href={`/${lang}/${module.href}`}
+              href={localizedPath(lang, module.href)}
               className="group rounded-2xl border border-rose-900/70 bg-[#120606]/75 p-5 shadow-[0_18px_45px_rgba(0,0,0,0.24)] hover:-translate-y-1 hover:border-amber-300/45 hover:bg-rose-950/40"
             >
               <h3 className="bg-gradient-to-r from-amber-200 to-yellow-500 bg-clip-text text-lg font-black text-transparent">

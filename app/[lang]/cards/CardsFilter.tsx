@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import type { CardEntry } from '@/lib/data/cards';
+import { localizedPath } from '@/lib/routes';
 
 type Props = {
   lang: 'zh' | 'en';
@@ -107,7 +108,7 @@ export default function CardsFilter({ lang, items }: Props) {
         {filtered.map(card => (
           <a
             key={card.id}
-            href={`/${lang}/cards/${card.id}`}
+            href={localizedPath(lang, `cards/${card.id}`)}
             className="rounded-lg border border-blood-800/70 bg-spire-900/80 p-4 hover:border-ember-400/70"
           >
             <h3 className="font-semibold text-bone-100">{zh ? card.nameZh : card.nameEn}</h3>

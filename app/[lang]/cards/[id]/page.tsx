@@ -3,6 +3,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { notFound } from 'next/navigation';
 import { isLocale, locales, type Locale } from '@/lib/i18n';
+import { localizedAlternates, localizedPath } from '@/lib/routes';
 
 type RawCardFile = {
   card?: {
@@ -127,22 +128,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description = zh
     ? `${name}卡牌详情：费用、稀有度、类型、效果与流派搭配建议。`
     : `${name} card details: cost, rarity, type, effect text and build synergies for Slay the Spire 2.`;
+  const route = `cards/${card.key}`;
 
   return {
     title,
     description,
     alternates: {
-      canonical: `/${lang}/cards/${card.key}`,
-      languages: {
-        zh: `/zh/cards/${card.key}`,
-        en: `/en/cards/${card.key}`,
-      },
+      canonical: localizedPath(lang, route),
+      languages: localizedAlternates(route),
     },
     openGraph: {
       type: 'article',
       title,
       description,
-      url: `/${lang}/cards/${card.key}`,
+      url: localizedPath(lang, route),
       locale: zh ? 'zh_CN' : 'en_US',
     },
     twitter: {
@@ -171,7 +170,7 @@ export default async function CardPage({ params }: Props) {
       <div className="flex items-center justify-between gap-4">
         <h1 className="text-3xl font-bold text-bone-100 sm:text-4xl">{zh ? '卡牌详情' : 'Card Detail'}</h1>
         <a
-          href={`/${locale}/cards`}
+          href={localizedPath(locale, 'cards')}
           className="rounded-md border border-blood-700 bg-spire-900/80 px-4 py-2 text-sm text-bone-200 hover:border-amber-400/80 hover:text-amber-200"
         >
           {zh ? '返回卡牌列表' : 'Back to Cards'}
