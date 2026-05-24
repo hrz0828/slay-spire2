@@ -77,8 +77,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const lang = rawLang as Locale;
   const dict = await getDictionary(lang);
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ?? 'https://slay-spire2-guide.pages.dev';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://sts2hub.com';
 
   return {
     metadataBase: new URL(siteUrl),

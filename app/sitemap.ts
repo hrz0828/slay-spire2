@@ -11,7 +11,7 @@ type RawCardFile = {
   };
 };
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://slay-spire2-guide.pages.dev';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://sts2hub.com';
 const LOCALES = ['zh', 'en'] as const;
 const indexRoutes = ['cards', 'relics', 'builds', 'tools'] as const;
 const CARDS_DIR = path.join(process.cwd(), 'cards');

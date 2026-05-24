@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { Locale } from '@/lib/i18n';
 import type { ContentCategoryId } from '@/lib/data/content-pyramid';
 import { getArticlesByCategory, getCategory } from '@/lib/data/content-pyramid';
+import { getArticleVisual } from '@/lib/data/article-visuals';
 import { localizedPath } from '@/lib/routes';
 
 type CategoryLandingProps = {
@@ -48,23 +49,35 @@ export function CategoryLanding({ categoryId, lang }: CategoryLandingProps) {
           {zh ? '本栏目新手推荐' : 'Beginner Reading Order'}
         </h2>
         <div className="mt-5 grid gap-4">
-          {articles.map(article => (
-            <Link
-              key={article.slug}
-              href={localizedPath(lang, `articles/${article.slug}`)}
-              className="group rounded-xl border border-blood-900/70 bg-spire-950/65 p-5 hover:border-amber-300/45 hover:bg-blood-950/35"
-            >
-              <p className="text-xs font-black uppercase tracking-[0.22em] text-ember-300">
-                {zh ? '阅读顺序' : 'Reading order'} {String(article.priority).padStart(2, '0')} · {category.title[lang]}
-              </p>
-              <h3 className="mt-3 text-lg font-bold text-bone-100 group-hover:text-amber-100">
-                {article.title[lang]}
-              </h3>
-              <p className="mt-2 leading-7 text-bone-300">
-                {article.description[lang]}
-              </p>
-            </Link>
-          ))}
+          {articles.map(article => {
+            const visual = getArticleVisual(article);
+
+            return (
+              <Link
+                key={article.slug}
+                href={localizedPath(lang, `articles/${article.slug}`)}
+                className="group grid overflow-hidden rounded-xl border border-blood-900/70 bg-spire-950/65 hover:border-amber-300/45 hover:bg-blood-950/35 md:grid-cols-[15rem_minmax(0,1fr)]"
+              >
+                <img
+                  src={visual.thumbnail}
+                  alt=""
+                  aria-hidden="true"
+                  className="aspect-[16/9] h-full w-full object-cover opacity-85 transition duration-200 group-hover:opacity-100"
+                />
+                <div className="p-5">
+                  <p className="text-xs font-black uppercase tracking-[0.22em] text-ember-300">
+                    {zh ? '阅读顺序' : 'Reading order'} {String(article.priority).padStart(2, '0')} · {category.title[lang]}
+                  </p>
+                  <h3 className="mt-3 text-lg font-bold text-bone-100 group-hover:text-amber-100">
+                    {article.title[lang]}
+                  </h3>
+                  <p className="mt-2 leading-7 text-bone-300">
+                    {article.description[lang]}
+                  </p>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </section>
     </section>

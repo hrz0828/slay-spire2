@@ -1,9 +1,9 @@
 const { readdirSync, readFileSync } = require('node:fs');
 const path = require('node:path');
 
-const BAIDU_SITE = process.env.BAIDU_SITE || 'yourdomain.com';
-const BAIDU_TOKEN = process.env.BAIDU_TOKEN || 'YOUR_BAIDU_TOKEN';
-const BASE_URL = 'https://yourdomain.com';
+const BAIDU_SITE = process.env.BAIDU_SITE || 'https://sts2hub.com';
+const BAIDU_TOKEN = process.env.BAIDU_TOKEN || 'ji3Jk0hy1rdkKgPl';
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://sts2hub.com';
 const CARDS_DIR = path.join(process.cwd(), 'cards');
 
 function loadCardKeys() {
@@ -30,7 +30,7 @@ function loadCardKeys() {
 }
 
 function buildZhCardUrls(cardKeys) {
-  return cardKeys.map(key => `${BASE_URL}/zh/cards/${key}`);
+  return cardKeys.map(key => `${BASE_URL}/cards/${key}`);
 }
 
 async function submitToBaidu(urls) {
@@ -67,7 +67,6 @@ async function submitToBaidu(urls) {
   if (!response.ok) {
     console.error('[baidu-submit] HTTP error:', response.status, response.statusText);
     console.error('[baidu-submit] response:', result);
-    process.exitCode = 1;
     return;
   }
 

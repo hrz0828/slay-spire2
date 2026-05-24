@@ -8,6 +8,7 @@ import {
   getCategory,
   getCoreArticle,
 } from '@/lib/data/content-pyramid';
+import { getArticleVisual } from '@/lib/data/article-visuals';
 import { isLocale, locales, type Locale } from '@/lib/i18n';
 import { localizedAlternates, localizedPath } from '@/lib/routes';
 
@@ -25,6 +26,7 @@ const articleLabels = {
     recommendation: '新手推荐',
     readingOrder: '阅读顺序',
     sectionLabel: '章节',
+    visualNote: '攻略配图',
   },
   en: {
     breadcrumb: 'Content Pyramid Article',
@@ -35,6 +37,7 @@ const articleLabels = {
     recommendation: 'Beginner pick',
     readingOrder: 'Reading order',
     sectionLabel: 'Section',
+    visualNote: 'Guide visual',
   },
 } satisfies Record<Locale, Record<string, string>>;
 
@@ -62,6 +65,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = article.title[lang];
   const description = article.description[lang];
   const keywords = article.keywords[lang];
+  const visual = getArticleVisual(article);
   const route = `articles/${article.slug}`;
   const canonical = localizedPath(lang, route);
 
@@ -81,11 +85,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
       url: canonical,
       tags: keywords,
+      images: [
+        {
+          url: visual.image,
+          width: 1200,
+          height: 675,
+          alt: visual.alt[lang],
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+      images: [visual.image],
     },
   };
 }
@@ -104,6 +117,7 @@ export default async function ArticlePage({ params }: Props) {
   const lang = rawLang as Locale;
   const labels = articleLabels[lang];
   const category = getCategory(article.category);
+  const visual = getArticleVisual(article);
   const relatedArticles = getArticlesByCategory(article.category)
     .filter(item => item.slug !== article.slug)
     .slice(0, 4);
@@ -154,6 +168,18 @@ export default async function ArticlePage({ params }: Props) {
           </div>
         </header>
 
+        <figure className="overflow-hidden rounded-2xl border border-blood-900/70 bg-spire-900/75 shadow-[0_18px_45px_rgba(0,0,0,0.2)]">
+          <img
+            src={visual.image}
+            alt={visual.alt[lang]}
+            className="aspect-[16/9] w-full object-cover"
+          />
+          <figcaption className="border-t border-blood-900/70 px-5 py-4 text-sm leading-6 text-bone-300">
+            <span className="font-black text-ember-300">{labels.visualNote}:</span>{' '}
+            {visual.caption[lang]}
+          </figcaption>
+        </figure>
+
         <div className="space-y-5">
           {article.sections[lang].map((section, index) => (
             <section
@@ -179,18 +205,32 @@ export default async function ArticlePage({ params }: Props) {
           <h2 className="text-lg font-black text-bone-100">{labels.related}</h2>
           <div className="mt-4 space-y-3">
             {relatedArticles.map(item => (
+              (() => {
+                const itemVisual = getArticleVisual(item);
+
+                return (
               <Link
                 key={item.slug}
                 href={localizedPath(lang, `articles/${item.slug}`)}
-                className="group block rounded-xl border border-blood-900/70 bg-spire-950/65 p-4 hover:border-amber-300/45 hover:bg-blood-950/35"
+                className="group block overflow-hidden rounded-xl border border-blood-900/70 bg-spire-950/65 hover:border-amber-300/45 hover:bg-blood-950/35"
               >
+                <img
+                  src={itemVisual.thumbnail}
+                  alt=""
+                  aria-hidden="true"
+                  className="h-24 w-full object-cover opacity-80"
+                />
+                <div className="p-4">
                 <p className="text-xs font-black uppercase tracking-[0.18em] text-ember-300">
                   {labels.readingOrder} {String(item.priority).padStart(2, '0')} · {category.title[lang]}
                 </p>
                 <h3 className="mt-2 text-sm font-bold leading-6 text-bone-100 group-hover:text-amber-100">
                   {item.title[lang]}
                 </h3>
+                </div>
               </Link>
+                );
+              })()
             ))}
           </div>
         </section>
