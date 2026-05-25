@@ -390,6 +390,12 @@ type ArticleSectionSeed = {
   };
 };
 
+type DetailedArticleContent = {
+  description: LocalizedText;
+  keywords?: LocalizedList;
+  sections: CoreArticle['sections'];
+};
+
 const articleSectionSeeds: Record<string, ArticleSectionSeed> = {
   'beginner-guide-first-clear': {
     zh: {
@@ -813,7 +819,400 @@ const articleSectionSeeds: Record<string, ArticleSectionSeed> = {
   },
 };
 
+const detailedArticleContent: Record<string, DetailedArticleContent> = {
+  'beginner-guide-first-clear': {
+    description: {
+      zh: '从第一局到首次通关的完整路线：按层数拆解伤害、防御、成长、商店和营火优先级，帮助新手把每个选择转化为更高胜率。',
+      en: 'A complete first-clear route from run one to victory, organized by act priorities for damage, block, scaling, shops, and campfires.',
+    },
+    keywords: {
+      zh: ['杀戮尖塔2新手攻略', '杀戮尖塔2首次通关', '第一层路线', '新手卡组构筑', '营火升级'],
+      en: ['Slay the Spire 2 beginner guide', 'first clear guide', 'Act 1 routing', 'beginner deckbuilding', 'campfire upgrades'],
+    },
+    sections: {
+      zh: [
+        {
+          heading: '首次通关的核心目标',
+          body: '第一次通关不要把目标设成“做出最强流派”，而要设成“每一层都回答当前最危险的问题”。第一层的问题通常是伤害够不够，第二层的问题是防御和群体处理够不够，第三层的问题是成长能否支撑长战。只要把目标从追求完美组合改成逐层补短板，胜率会立刻稳定很多。',
+        },
+        {
+          heading: '第一层：先拿能打赢精英和 Boss 的伤害',
+          body: '开局前几场普通战，优先拿能马上造成伤害的牌。新手最常见的失败是过早拿慢速成长、复杂配合或高费牌，导致精英战前没有足够输出。第一层的好牌不一定是终局核心，它只需要让你更快结束危险战斗，减少血量消耗，并争取更多营火升级机会。',
+        },
+        {
+          heading: '第二层：补防御、清场和稳定性',
+          body: '能过第一层并不代表卡组已经成型。第二层往往会惩罚只会单点输出的卡组，也会惩罚防御牌密度过低的卡组。进入第二层后先检查三件事：是否能处理多个敌人，是否能在高压回合挡住主要伤害，是否有足够抽牌或能量让核心牌稳定出现。如果没有，就不要继续拿只增加上限但不能改善当前战斗的奖励。',
+        },
+        {
+          heading: '第三层：检查终局成长，而不是继续补杂牌',
+          body: '第三层开始后，普通战奖励的边际价值会下降。此时最重要的是确认卡组有没有终局答案：输出是否会随回合增长，防御是否能重复产生，关键牌是否能被抽到和打出。很多首次通关失败不是因为没有强牌，而是强牌被太多低影响牌稀释，导致关键回合抽不到真正需要的东西。',
+        },
+        {
+          heading: '商店与营火的优先级',
+          body: '商店不是看到稀有牌就买，营火也不是永远升级。商店优先看删牌、药水和能立即补短板的牌；营火优先升级能改变关键回合的牌，例如费用下降、伤害断点、防御断点或稳定抽牌。血量危险时休息不是失败，而是把已经获得的强度保留下来。',
+        },
+        {
+          heading: '新手最稳的路线选择',
+          body: '第一层可以适度贪精英，但前提是你已经有伤害牌、药水或营火支撑。第二层如果血量低、药水差、卡组还没补防御，就应减少精英路线，把商店和营火当成修正点。路线不是越贪越强，而是用当前血量、药水、金币和卡组短板决定能承担多少风险。',
+        },
+        {
+          heading: '首次通关前的复盘模板',
+          body: '每次失败后只记录三个问题：死前两场战斗最缺什么，上一层有没有机会补这个短板，哪一次选择让问题变得更严重。不要把复盘写成流水账。你需要找的是重复模式，例如总是缺伤害、总是过早拿成长、总是为了精英路线牺牲营火。',
+        },
+        {
+          heading: '一局游戏内的执行清单',
+          body: '进入新一层时先写下当前最怕的敌人类型；拿牌前先判断它解决伤害、防御、过牌、能量还是成长；进商店前先决定是否需要删牌或药水；打 Boss 前检查有没有至少一种长期输出和一种可重复防御。把这份清单执行完整，比记住单张卡牌排行更重要。',
+        },
+      ],
+      en: [
+        {
+          heading: 'The Real First-Clear Goal',
+          body: 'Your first clear should not be about forcing the flashiest archetype. It should be about answering the most dangerous question in each act. Act 1 usually asks for damage, Act 2 asks for stable defense and multi-enemy handling, and Act 3 asks whether your scaling can survive long fights.',
+        },
+        {
+          heading: 'Act 1: Draft Damage Before Dreams',
+          body: 'In the first few hallway fights, prioritize cards that immediately improve damage. A common beginner loss comes from taking slow scaling, expensive payoffs, or fragile synergy before the deck can beat elites. Early damage cards do not need to be perfect endgame cards; they need to preserve HP and open stronger routes.',
+        },
+        {
+          heading: 'Act 2: Add Defense and Fight Control',
+          body: 'Passing Act 1 does not mean the deck is complete. Act 2 punishes decks that only attack one target or cannot block high-pressure turns. Check whether you can handle multiple enemies, produce enough block on key turns, and find core cards reliably through draw or energy support.',
+        },
+        {
+          heading: 'Act 3: Stop Adding Filler',
+          body: 'By Act 3, many card rewards are less valuable than deck consistency. Confirm whether damage scales, block can be repeated, and key cards can be found and played. Many first-clear losses happen because strong cards are buried under too many low-impact additions.',
+        },
+        {
+          heading: 'Shops and Campfires',
+          body: 'A shop is not just a place to buy the rarest card, and a campfire is not always an upgrade. Shops should solve removals, potions, or urgent deck gaps. Campfire upgrades are best when they change real turns through cost reduction, damage breakpoints, block breakpoints, or better draw.',
+        },
+        {
+          heading: 'Safe Routing',
+          body: 'Act 1 elites are good when damage, potions, and campfires support them. In Act 2, low HP or weak defense should push you toward shops and campfires instead of greed. Good routing is not maximum risk; it is risk matched to HP, potions, gold, and deck weakness.',
+        },
+        {
+          heading: 'Review Template',
+          body: 'After a loss, answer three questions: what did the final two fights demand, where did the previous act offer a chance to fix it, and which choice made the weakness worse? Look for repeated patterns instead of writing a long run diary.',
+        },
+        {
+          heading: 'In-Run Checklist',
+          body: 'At the start of each act, name the enemy type you fear. Before taking a card, decide whether it improves damage, block, draw, energy, or scaling. Before a shop, decide whether removal or potions matter more. Before a boss, check for one lasting damage plan and one repeatable block plan.',
+        },
+      ],
+    },
+  },
+  'beginner-mistakes': {
+    description: {
+      zh: '拆解新手最常见的 15 类失败模式：拿牌过多、路线过贪、药水太晚、只看稀有度、忽略费用曲线，并给出可执行修正方法。',
+      en: 'A detailed breakdown of common beginner failure patterns: over-drafting, greedy routing, late potions, rarity traps, and broken cost curves.',
+    },
+    sections: {
+      zh: [
+        {
+          heading: '错误一：把每次奖励都当成必须拿牌',
+          body: '跳牌是构筑的一部分，不是浪费奖励。每多一张低影响牌，核心牌出现率都会下降。新手应在中后期更频繁地问：这张牌能不能解决当前短板，还是只让卡组变厚？如果答案不清楚，跳过通常比拿一张“也许有用”的牌更好。',
+        },
+        {
+          heading: '错误二：第一层过早追求终局组合',
+          body: '很多终局强牌需要能量、抽牌、遗物或其他组件支撑。第一层真正稀缺的是即时伤害和减少掉血的能力。过早拿慢速成长会让你在精英战中付出大量血量，甚至还没等组合启动就结束一局。',
+        },
+        {
+          heading: '错误三：路线只看奖励，不看修正点',
+          body: '好路线不只是精英多、问号多、宝箱多，还要有营火和商店作为修正点。没有营火的多精英路线会放大一次错误选牌的代价；没有商店的路线会让你无法删牌、买药水或补关键短板。',
+        },
+        {
+          heading: '错误四：药水留到已经救不了的时候',
+          body: '药水的价值在于改变危险战斗的结果，而不是作为收藏品进 Boss 房。能少掉 15 点血、保住一次升级、打赢一个关键精英时，药水就已经创造了足够价值。新手可以把药水看成临时强牌，而不是最后底牌。',
+        },
+        {
+          heading: '错误五：只看单卡强度，不看费用曲线',
+          body: '一手牌里有三张强牌但只能打出一张，实际强度就会大幅下降。拿高费牌前要检查能量来源，拿大量过牌前要检查抽到后能不能打出。费用曲线失衡的卡组看起来很豪华，实战却经常空过。',
+        },
+        {
+          heading: '错误六：防御和输出只补一边',
+          body: '只补输出会在高压回合被击穿，只补防御会把战斗拖长并承受更多总伤害。稳定卡组需要在不同阶段切换：前期用输出减少掉血，中期补防御抗压力，后期用成长解决长战。',
+        },
+        {
+          heading: '错误七：把失败归因于运气，忽略可控选择',
+          body: '爬塔游戏当然有随机性，但大部分失败前都有可控信号：血量太低还打精英、缺伤害却拿慢牌、没有药水还走危险路线。复盘时先找能改变的选择，再谈运气，这样下一局才会变强。',
+        },
+        {
+          heading: '修正方法：每次选择前问一个问题',
+          body: '奖励界面问“它解决什么短板”，地图界面问“失败时有没有退路”，商店界面问“金币能否立刻降低死亡风险”，战斗界面问“这回合进攻会不会比满防更少掉血”。把这些问题变成习惯，就能避开大多数新手坑。',
+        },
+      ],
+      en: [
+        {
+          heading: 'Mistake 1: Treating Every Reward as Mandatory',
+          body: 'Skipping is part of deckbuilding. Every low-impact card lowers access to key cards. In the midgame, ask whether the card solves a current gap or merely makes the deck thicker.',
+        },
+        {
+          heading: 'Mistake 2: Chasing Endgame Too Early',
+          body: 'Many powerful plans need energy, draw, relics, or support cards. Act 1 usually needs immediate damage first. Slow scaling can cost so much HP that the run ends before the payoff matters.',
+        },
+        {
+          heading: 'Mistake 3: Ignoring Correction Points',
+          body: 'Good paths include campfires and shops, not just rewards. A greedy route without campfires magnifies bad drafts, while a route without shops can block removals, potions, and urgent fixes.',
+        },
+        {
+          heading: 'Mistake 4: Saving Potions Too Long',
+          body: 'A potion is valuable when it changes a dangerous fight. Preventing major HP loss, protecting an upgrade, or winning a key elite is enough value. Treat potions as temporary strong cards.',
+        },
+        {
+          heading: 'Mistake 5: Ignoring the Cost Curve',
+          body: 'A hand of strong cards is weak if only one can be played. Before adding expensive cards, check energy. Before adding draw, check whether the deck can play what it finds.',
+        },
+        {
+          heading: 'Mistake 6: Solving Only Damage or Only Block',
+          body: 'Pure damage gets punished by pressure turns, while pure block stretches fights and increases total damage taken. Good decks shift from early damage to midgame defense and late scaling.',
+        },
+        {
+          heading: 'Mistake 7: Blaming Only Luck',
+          body: 'Randomness matters, but most losses have earlier signals: low HP before elites, slow cards when damage is missing, or dangerous routes without potions. Review controllable decisions first.',
+        },
+        {
+          heading: 'The Fix',
+          body: 'On rewards, ask what gap the card solves. On maps, ask where the fallback is. In shops, ask how gold lowers death risk. In combat, ask whether attacking now reduces total damage more than full blocking.',
+        },
+      ],
+    },
+  },
+  'winning-deckbuilding-basics': {
+    description: {
+      zh: '深入讲解删牌、拿牌、跳牌和升级的判断顺序，帮助玩家从“拿强卡”进阶到“构筑能通关的完整系统”。',
+      en: 'A deeper guide to removals, picks, skips, and upgrades that turns strong-card drafting into complete winning deck construction.',
+    },
+    sections: {
+      zh: [
+        {
+          heading: '通关卡组不是强牌集合，而是运转系统',
+          body: '一套能通关的卡组通常包含五个能力：足够早的伤害、可重复防御、抽到关键牌的方法、打出关键牌的能量，以及面对长战的成长。拿牌时不要只问“这张强不强”，而要问“它让系统哪一部分更可靠”。',
+        },
+        {
+          heading: '前期拿牌：接受过渡牌，但要知道何时停止',
+          body: '第一层需要过渡伤害牌，因为基础牌组通常无法稳定打精英。但过渡牌的使命是帮你活到中期，不是无限堆叠。进入第二层后，如果输出已经够用，就应减少同类攻击，转向防御、过牌、能量或成长。',
+        },
+        {
+          heading: '删牌：提高关键牌出现率',
+          body: '删牌的价值不只是移除弱牌，更是让好牌更频繁出现。通常先删低效率基础牌，但不要机械执行。若卡组极度缺攻击，过早删攻击会让第一层更危险；若防御密度不足，也不要为了“标准答案”删掉仍然需要的牌。',
+        },
+        {
+          heading: '跳牌：保护卡组密度',
+          body: '当奖励不能提高当前胜率，也不能连接已有核心时，跳牌就是正确选择。尤其在卡组已经有清晰主线后，额外补一张低影响牌常常会降低关键回合质量。跳牌的本质是用少量选择换稳定抽牌。',
+        },
+        {
+          heading: '升级：优先改变关键回合',
+          body: '好升级应该改变战斗结果，而不只是数字好看。费用降低、抽牌增加、伤害达到击杀断点、防御达到少掉一段伤害的断点，都比单纯小幅加值更重要。升级前可以问：它会在哪个敌人或 Boss 回合救我？',
+        },
+        {
+          heading: '协同：先有底座，再谈上限',
+          body: '围绕协同构筑时，要先确认底座是否能独立运转。只拿 payoff 而没有触发器，或只拿触发器而没有收益，都会让卡组变弱。最稳的协同牌通常既能配合核心，又有独立下限。',
+        },
+        {
+          heading: '卡组检查：用五类标签复盘',
+          body: '每层结束时把卡组按伤害、防御、过牌、能量、成长五类标记。某一类完全缺失时，下一层路线和奖励就要围绕它修正；某一类已经过量时，继续补同类牌通常会稀释卡组。',
+        },
+        {
+          heading: '实战例子：为什么强稀有牌也可能不拿',
+          body: '如果一张稀有牌费用高、启动慢、需要配合，而你下一场要面对高压精英，它可能不是当前答案。相反，一张普通但能马上补伤害或防御断点的牌，可能更接近通关选择。构筑水平的提升，正是从敢于拒绝“不适合现在的强牌”开始。',
+        },
+      ],
+      en: [
+        {
+          heading: 'A Winning Deck Is a System',
+          body: 'A winning deck usually needs early damage, repeatable block, access to key cards, enough energy to play them, and scaling for long fights. Ask what part of the system a card improves.',
+        },
+        {
+          heading: 'Early Picks: Take Bridge Cards, Then Stop',
+          body: 'Act 1 often requires bridge damage because starter decks cannot fight elites reliably. Those cards help you reach the midgame; they should not become endless additions once damage is already solved.',
+        },
+        {
+          heading: 'Removals Improve Access',
+          body: 'Removing weak cards makes good cards appear more often. Usually starter cards go first, but context matters. Do not remove needed attacks or block before the deck has replacements.',
+        },
+        {
+          heading: 'Skipping Protects Density',
+          body: 'When a reward does not improve current win rate or connect to an existing core, skipping is correct. A clear deck often beats a thicker deck with more medium cards.',
+        },
+        {
+          heading: 'Upgrades Should Change Turns',
+          body: 'Strong upgrades change outcomes through cost reduction, draw, damage breakpoints, or block breakpoints. Before upgrading, ask which enemy or boss turn it improves.',
+        },
+        {
+          heading: 'Synergy Needs a Floor',
+          body: 'A payoff without triggers or triggers without payoff weakens the deck. The safest synergy cards connect to your core while still doing something useful alone.',
+        },
+        {
+          heading: 'Five-Tag Review',
+          body: 'At the end of each act, tag the deck by damage, block, draw, energy, and scaling. Missing tags define the next priority. Overfilled tags warn you to stop drafting more of the same.',
+        },
+        {
+          heading: 'Why Strong Rares Can Be Wrong',
+          body: 'An expensive, slow, unsupported rare may fail the next elite. A plain card that fixes an immediate damage or block breakpoint can be the better winning choice.',
+        },
+      ],
+    },
+  },
+  'map-pathing-guide': {
+    description: {
+      zh: '把地图路线拆成风险、奖励和修正点：什么时候打精英，什么时候进商店，什么时候走问号，如何根据血量和药水动态改路线。',
+      en: 'A routing guide that breaks maps into risk, reward, and correction points: elites, shops, events, campfires, HP, and potions.',
+    },
+    sections: {
+      zh: [
+        {
+          heading: '路线选择的本质：用风险换成长',
+          body: '每个节点都在交换资源。普通战用血量换选牌，精英用更高风险换遗物和更强奖励，商店用金币换确定性修正，营火用路线位置换升级或休息。好路线不是奖励最多，而是风险能被当前卡组承受。',
+        },
+        {
+          heading: '第一层：精英路线要看伤害和药水',
+          body: '第一层精英通常是提高上限的重要来源，但前提是你能在精英前拿到足够伤害或强药水。如果前三场普通战后仍然缺输出，强行走多精英路线很容易把血量打穿。优秀路线通常会给你一个可回退选择：打得顺就进精英，打得差就转营火或商店。',
+        },
+        {
+          heading: '第二层：不要低估普通战压力',
+          body: '第二层普通战本身就可能消耗大量血量，因此路线不能只看精英数量。若卡组缺群体处理、防御或稳定抽牌，连续普通战也会很危险。此时商店和营火的价值上升，因为它们能在真正崩盘前修正短板。',
+        },
+        {
+          heading: '问号房：不是免费奖励',
+          body: '问号的优势是可能给高价值事件，缺点是减少选牌和可预测性。新手常在缺伤害时走太多问号，结果到了 Boss 前仍然没有基础能力。问号更适合两种情况：血量不适合打怪，或卡组已经足够稳定，只需要事件、金币、删牌或遗物机会。',
+        },
+        {
+          heading: '商店：带着目标进去',
+          body: '进商店前先看金币和短板。金币少时商店价值有限；金币多且卡组有明确问题时，商店可能比精英更重要。常见优先级是关键药水、删牌、补短板卡、核心遗物。不要因为商店里有贵牌，就忘记删牌和药水的稳定价值。',
+        },
+        {
+          heading: '营火：路线里的保险',
+          body: '营火让路线有弹性。血量高时它是升级点，血量低时它是保命点。选择路线时要看精英前后有没有营火：精英前营火能升级关键牌提高胜率，精英后营火能修复损血，让你继续执行后半层计划。',
+        },
+        {
+          heading: '动态改路线：不要被开局计划绑死',
+          body: '路线计划必须随着奖励变化。拿到强伤害和好药水，可以从保守路线转向精英；连续掉血或奖励不佳，就要及时转向商店、营火或低风险节点。高手和新手的差距往往不在开局规划，而在中途承认计划已经不适合当前局面。',
+        },
+        {
+          heading: '路线复盘：看代价是否换到收益',
+          body: '复盘路线时不要只问“我是不是该打精英”，要问“我用多少血量换到了什么”。如果打精英后获得遗物并保住升级，通常值得；如果为了问号错过普通战选牌，导致 Boss 前缺伤害，就说明路线没有服务卡组需求。',
+        },
+      ],
+      en: [
+        {
+          heading: 'Routing Trades Risk for Growth',
+          body: 'Every node exchanges resources. Hallway fights trade HP for card rewards, elites trade higher risk for relics, shops trade gold for certainty, and campfires trade route position for upgrades or healing.',
+        },
+        {
+          heading: 'Act 1: Elites Need Damage and Potions',
+          body: 'Act 1 elites can raise ceiling, but only when damage or strong potions support the fight. Good paths often include a fallback: take the elite if rewards are good, pivot if the run starts poorly.',
+        },
+        {
+          heading: 'Act 2: Hallways Can Be Dangerous',
+          body: 'Act 2 hallway fights can drain HP by themselves. If the deck lacks multi-enemy control, block, or draw, shops and campfires become more valuable than another risky fight.',
+        },
+        {
+          heading: 'Events Are Not Free',
+          body: 'Question marks can be powerful, but they reduce predictable card rewards. They are better when HP is too low for fights or the deck is already stable and wants events, removals, gold, or relic chances.',
+        },
+        {
+          heading: 'Enter Shops With a Goal',
+          body: 'Before a shop, check gold and deck weakness. Potions, removals, gap-filling cards, and core relics often beat expensive cards that do not change the next fight.',
+        },
+        {
+          heading: 'Campfires Are Insurance',
+          body: 'Campfires create route flexibility. At high HP they become upgrades; at low HP they preserve the run. Their position before or after elites changes how much risk the route can hold.',
+        },
+        {
+          heading: 'Change Routes Mid-Act',
+          body: 'A route plan should update after rewards. Strong damage and potions can justify more elites. Bad fights or weak rewards should push toward shops, campfires, or safer nodes.',
+        },
+        {
+          heading: 'Review the Exchange',
+          body: 'Do not review routing as only “should I have fought the elite?” Ask what HP bought. A relic plus preserved upgrades may be worth it; missing card rewards because of too many events may not be.',
+        },
+      ],
+    },
+  },
+  'combat-decision-making': {
+    description: {
+      zh: '深入讲解回合内决策：击杀线、伤害承受、药水时机、敌人意图、状态计算，帮助玩家减少“看似防住却输掉整场”的情况。',
+      en: 'A turn-by-turn combat decision guide covering lethal math, acceptable damage, potion timing, enemy intent, and status calculations.',
+    },
+    sections: {
+      zh: [
+        {
+          heading: '战斗目标不是满防，而是降低总损失',
+          body: '新手常把“本回合不掉血”当成唯一目标，但很多战斗中更好的选择是少挡一点、提前击杀、减少后续回合总伤害。判断一回合时不要只看当前伤害，而要估算如果拖一回合，敌人还会多造成多少压力。',
+        },
+        {
+          heading: '先算击杀线，再决定防御线',
+          body: '行动前先问：这回合能不能击杀，或者下回合能不能稳定击杀？如果能击杀，防御价值会下降；如果不能击杀，就要计算这回合投入多少防御能让下一回合仍有资源结束战斗。击杀线判断是进攻和防御取舍的基础。',
+        },
+        {
+          heading: '敌人意图决定手牌价值',
+          body: '同一张牌在不同敌人意图下价值完全不同。敌人本回合不攻击时，防御牌价值下降，成长、过牌和输出价值上升；敌人多段攻击时，防御效率和减伤状态更重要；敌人即将强化或召唤时，爆发输出可能比满防更关键。',
+        },
+        {
+          heading: '状态计算：易伤、虚弱和多段伤害',
+          body: '易伤和虚弱会改变真实伤害，不能凭感觉出牌。多段攻击尤其需要认真计算，因为一点力量、一次减伤或一层虚弱会被重复放大。养成先算修正后数值再出牌的习惯，可以避免很多“差一点死”的局面。',
+        },
+        {
+          heading: '药水时机：能改变路线就值得用',
+          body: '药水不一定要留给 Boss。若一瓶药水能让你少休息一次、多升级一次、打赢精英或避免掉到危险血线，它就已经影响了整局路线。最糟糕的药水使用方式，是等血量已经低到下一场普通战都危险时才想起来。',
+        },
+        {
+          heading: '什么时候可以主动吃伤害',
+          body: '主动吃伤害必须换到明确收益，例如提前击杀、保留关键药水、完成强升级路线或避免更危险的下回合。不能为了多打几滴伤害盲目掉血。判断标准是：这次掉血是否降低整场战斗或整层地图的总风险。',
+        },
+        {
+          heading: '手牌排序：必打、条件打、不要打',
+          body: '每回合先把手牌分成三类：必打牌解决击杀或防御断点；条件牌取决于剩余能量和敌人行动；不要打的牌会浪费能量、打乱抽牌或让下回合更差。这个排序能减少“看到能打就打”的低质量操作。',
+        },
+        {
+          heading: '战斗复盘：记录错过的转折点',
+          body: '战斗结束后只复盘一个问题：哪一回合如果换一种打法，后续损失会明显减少？常见转折点包括药水晚用、错过击杀线、过度防御拖长战斗、没有提前处理召唤物或转阶段。抓住这些点，战斗水平提升最快。',
+        },
+      ],
+      en: [
+        {
+          heading: 'The Goal Is Not Always Full Block',
+          body: 'The real combat goal is reducing total loss. Sometimes taking a little damage now to end the fight earlier prevents more damage across later turns.',
+        },
+        {
+          heading: 'Calculate Lethal Before Block',
+          body: 'Before playing cards, ask whether you can kill this turn or guarantee lethal next turn. If lethal is available, block value changes. If not, block enough to keep the next turn playable.',
+        },
+        {
+          heading: 'Enemy Intent Changes Card Value',
+          body: 'The same hand has different value against different intents. Non-attacking turns favor scaling and damage. Multi-hit turns raise the value of efficient block and damage reduction.',
+        },
+        {
+          heading: 'Status Math Matters',
+          body: 'Vulnerable, Weak, and multi-hit attacks change real numbers. Calculate modified damage before playing, especially when small modifiers repeat across many hits.',
+        },
+        {
+          heading: 'Potion Timing',
+          body: 'A potion is worth using if it preserves an upgrade, wins an elite, prevents a dangerous HP drop, or changes the route. Saving every potion for bosses often wastes value.',
+        },
+        {
+          heading: 'When Taking Damage Is Correct',
+          body: 'Taking damage is correct only when it buys a clear benefit: lethal, a safer next turn, a preserved potion, or a stronger route. The damage should reduce total risk, not just add a few points of attack.',
+        },
+        {
+          heading: 'Sort the Hand',
+          body: 'Divide each hand into must-play, conditional, and do-not-play cards. This prevents autopiloting every playable card and wasting energy on actions that do not improve the fight.',
+        },
+        {
+          heading: 'Combat Review',
+          body: 'After a fight, identify the one turn where a different line would have reduced later loss. Common turning points are late potions, missed lethal, over-blocking, and ignoring summons or phase changes.',
+        },
+      ],
+    },
+  },
+};
+
 function buildSections(article: ArticleBlueprint): CoreArticle['sections'] {
+  const detailed = detailedArticleContent[article.slug];
+
+  if (detailed) {
+    return detailed.sections;
+  }
+
   const seed = articleSectionSeeds[article.slug];
   const category = getCategory(article.category);
 
@@ -901,6 +1300,12 @@ function buildSections(article: ArticleBlueprint): CoreArticle['sections'] {
 }
 
 function buildDescription(article: ArticleBlueprint): LocalizedText {
+  const detailed = detailedArticleContent[article.slug];
+
+  if (detailed) {
+    return detailed.description;
+  }
+
   const category = getCategory(article.category);
 
   return {
@@ -910,6 +1315,12 @@ function buildDescription(article: ArticleBlueprint): LocalizedText {
 }
 
 function buildKeywords(article: ArticleBlueprint): LocalizedList {
+  const detailed = detailedArticleContent[article.slug];
+
+  if (detailed?.keywords) {
+    return detailed.keywords;
+  }
+
   return {
     zh: [article.title.zh, ...categoryKeywordMap[article.category].zh],
     en: [article.title.en, ...categoryKeywordMap[article.category].en],
