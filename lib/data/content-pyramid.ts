@@ -330,6 +330,8 @@ const articleBlueprints: ArticleBlueprint[] = [
   { slug: 'elite-enemy-guide', category: 'bosses', priority: 28, title: { zh: '精英敌人攻略：什么时候该贪精英，什么时候必须避开', en: 'Elite Enemy Guide: When to Fight Elites and When to Avoid Them' } },
   { slug: 'best-beginner-builds', category: 'builds', priority: 29, title: { zh: '最稳新手流派推荐：低操作、高容错的通关思路', en: 'Best Beginner Builds: Safe, Forgiving Archetypes for First Clears' } },
   { slug: 'before-high-ascension-strategies', category: 'strategy', priority: 30, title: { zh: '高进阶前应该掌握的 10 个策略：从能通关到稳定通关', en: '10 Strategies to Learn Before High Ascension: From Clearing to Winning Consistently' } },
+  { slug: 'act-by-act-deck-checklist', category: 'guides', priority: 31, title: { zh: '逐层卡组体检清单：第一层、第二层、第三层分别要补什么', en: 'Act-by-Act Deck Checklist: What to Fix in Acts 1, 2, and 3' } },
+  { slug: 'potions-shops-campfires-guide', category: 'strategy', priority: 32, title: { zh: '药水、商店与营火资源转换攻略：怎样把小优势换成通关率', en: 'Potions, Shops, and Campfires Guide: Converting Small Edges Into Win Rate' } },
 ];
 
 const categoryKeywordMap: Record<ContentCategoryId, LocalizedList> = {
@@ -1200,6 +1202,166 @@ const detailedArticleContent: Record<string, DetailedArticleContent> = {
         {
           heading: 'Combat Review',
           body: 'After a fight, identify the one turn where a different line would have reduced later loss. Common turning points are late potions, missed lethal, over-blocking, and ignoring summons or phase changes.',
+        },
+      ],
+    },
+  },
+  'act-by-act-deck-checklist': {
+    description: {
+      zh: '一篇按层数执行的卡组体检清单：每层开始、精英前、Boss 前分别检查伤害、防御、群体处理、成长、抽牌和费用曲线。',
+      en: 'An act-by-act deck audit checklist for damage, block, area coverage, scaling, draw, and cost curve before elites and bosses.',
+    },
+    keywords: {
+      zh: ['杀戮尖塔2卡组检查', '逐层攻略', '第一层第二层第三层', '卡组短板', 'Boss前准备'],
+      en: ['Slay the Spire 2 deck checklist', 'act by act guide', 'deck weaknesses', 'boss preparation', 'elite readiness'],
+    },
+    sections: {
+      zh: [
+        {
+          heading: '这篇清单解决什么问题',
+          body: '很多失败局不是因为某一张牌拿错，而是卡组在错误时间缺了错误能力：第一层缺伤害，第二层缺群体和防御，第三层缺成长和稳定抽牌。逐层体检的作用，是把“我感觉卡组还行”改成可验证的问题：下一场关键战斗要什么，我现在有没有，缺口能用拿牌、升级、商店、药水还是路线来补。',
+        },
+        {
+          heading: '第一层前半：先问伤害够不够',
+          body: '第一层前 3 到 4 场普通战，卡组最重要的指标是能不能快速结束战斗。优先补即时攻击、低条件输出、能提升击杀线的升级和能打精英的药水。此时慢速成长、需要多张配合的牌、只在长战中兑现的牌都要降权。判断标准很直接：抽到这张牌的回合，它是否让敌人少活一回合。',
+        },
+        {
+          heading: '第一层后半：根据 Boss 和精英改补强方向',
+          body: '拿到几张过渡伤害后，不要继续无脑堆攻击。第一层后半要看 Boss 信息、精英路线和血量状态：如果 Boss 战会拖长，就开始补基础防御和一张可持续收益牌；如果还要打精英，就保留药水并优先升级能改变伤害断点的牌；如果血量低，就把营火和商店当成救局资源，而不是继续赌奖励。',
+        },
+        {
+          heading: '第二层入口：检查三项硬指标',
+          body: '进第二层先检查群体处理、防御厚度和抽牌稳定性。群体处理不一定非要是纯 AoE，也可以是多段伤害、溢出击杀、召唤物处理或能快速转火的爆发。防御厚度不是有几张防御牌，而是差手牌时能否挡住高压回合。抽牌稳定性决定核心牌能不能及时出现，尤其是卡组已经变厚时。',
+        },
+        {
+          heading: '第二层中段：不要让过渡牌占满卡组',
+          body: '第二层最容易出现“第一层牌还在工作，但已经不够强”的问题。过渡攻击可以帮你活过第一层，却可能在第二层变成抽牌污染。此时拿牌要更严格：只拿能补短板、能服务核心计划、或能让旧牌继续产生价值的牌。商店中的删牌、关键药水和稳定防御，往往比另一张普通输出更能提高胜率。',
+        },
+        {
+          heading: '第三层入口：确认终局四件套',
+          body: '第三层开始时检查四件事：持续输出、可重复防御、成长速度、关键牌可达性。持续输出解决长战，重复防御解决连续高压，成长速度决定 Boss 战能否越打越强，关键牌可达性决定强牌是否真的能被抽到和打出。缺其中一项时，第三层奖励就要围绕它修正，而不是继续拿泛用好牌。',
+        },
+        {
+          heading: 'Boss 前：把卡组变窄，而不是变花',
+          body: 'Boss 前的最后几次奖励，要优先提高确定性。低影响补牌会稀释核心循环，未经验证的组合会占用抽牌和能量，过慢的成长可能来不及兑现。更稳的选择通常是删掉基础牌或污染牌、升级核心牌、购买针对 Boss 的药水、补一张能覆盖关键回合的防御或过牌。',
+        },
+        {
+          heading: '一眼判断卡组短板的模板',
+          body: '如果普通战掉血多，多半是启动慢、群体差或防御密度不足；如果精英战掉血多，多半是伤害断点、药水使用或路线风险错误；如果 Boss 战失败，多半是成长、防御重复性或关键牌可达性不足。把死亡原因映射到这些能力，再回看上一层有没有补救机会，就能快速找到下一局该练什么。',
+        },
+      ],
+      en: [
+        {
+          heading: 'What This Checklist Fixes',
+          body: 'Many losses do not come from one bad card. They come from missing the wrong capability at the wrong time: damage in Act 1, area control and block in Act 2, or scaling and consistency in Act 3. This checklist turns “the deck feels fine” into testable questions.',
+        },
+        {
+          heading: 'Early Act 1: Check Damage First',
+          body: 'In the first few hallway fights, the key metric is whether the deck can end fights quickly. Prioritize immediate attacks, low-condition damage, damage breakpoint upgrades, and potions that make elites realistic. Slow scaling and multi-card packages should be discounted early.',
+        },
+        {
+          heading: 'Late Act 1: Adjust for Boss and Elites',
+          body: 'After a few bridge damage cards, stop stacking attacks blindly. Use the revealed boss, elite route, and HP total to decide whether to add block, preserve potions, upgrade damage breakpoints, or route toward shops and campfires.',
+        },
+        {
+          heading: 'Act 2 Entry: Three Hard Checks',
+          body: 'At the start of Act 2, check area handling, block depth, and draw consistency. Area handling can be AoE, multi-hit damage, burst that switches targets, or ways to remove summons quickly. Block depth means surviving bad hands, not merely owning block cards.',
+        },
+        {
+          heading: 'Mid Act 2: Bridge Cards Start Aging',
+          body: 'Act 2 often exposes cards that were good enough earlier but no longer solve fights. Draft more strictly: take cards that cover gaps, serve the real core, or keep old cards relevant. Removals, key potions, and stable block can beat another plain attack.',
+        },
+        {
+          heading: 'Act 3 Entry: Confirm the Endgame Kit',
+          body: 'Act 3 asks for sustained damage, repeatable block, scaling speed, and access to key cards. Sustained damage wins long fights, repeatable block handles pressure, scaling speed beats bosses, and access makes sure strong cards actually appear.',
+        },
+        {
+          heading: 'Before the Boss: Narrow the Deck',
+          body: 'The final rewards should increase certainty. Low-impact cards dilute the core, untested combos consume draw and energy, and slow scaling may arrive too late. Prefer removals, core upgrades, boss-targeted potions, and cards that cover a known key turn.',
+        },
+        {
+          heading: 'Fast Weakness Diagnosis',
+          body: 'If hallway fights drain HP, the deck may start slowly, lack area control, or miss block density. If elites hurt too much, check damage breakpoints, potion timing, and route risk. If bosses win, review scaling, repeatable block, and key-card access.',
+        },
+      ],
+    },
+  },
+  'potions-shops-campfires-guide': {
+    description: {
+      zh: '把药水、金币、删牌、升级和休息放进同一套资源转换框架，讲清什么时候花资源、什么时候保资源、怎样用小优势滚成胜势。',
+      en: 'A resource-conversion guide for potions, gold, removals, upgrades, and rests: when to spend, when to preserve, and how small edges become wins.',
+    },
+    keywords: {
+      zh: ['杀戮尖塔2药水攻略', '商店购买优先级', '营火升级休息', '资源管理', '稳定通关'],
+      en: ['Slay the Spire 2 potions', 'shop priorities', 'campfire upgrades', 'resource management', 'consistent wins'],
+    },
+    sections: {
+      zh: [
+        {
+          heading: '资源转换的核心原则',
+          body: '血量、药水、金币、升级和删牌不是孤立资源，它们会互相转换。药水可以把危险精英变成遗物和稀有奖励，金币可以变成删牌、关键药水或补短板卡，营火升级可以减少之后多场战斗的损血。判断资源是否该花，关键看它能否降低未来关键节点的失败率。',
+        },
+        {
+          heading: '药水：不是最后一刻才用的保险',
+          body: '药水最好的用途是改变路线，而不只是避免死亡。能让你打赢精英、少休息一次、多升级一次、保住高价值路线，药水就已经赚到。新手常见错误是把药水留到 Boss，结果前面因为掉血过多被迫休息，等于用一次升级机会换了一个满药水栏。',
+        },
+        {
+          heading: '什么时候必须喝药水',
+          body: '出现这些情况应主动用药水：本回合用药能击杀或避免大额掉血；精英战中用药能保住营火升级；药水能解决卡组暂时没有的能力，例如群体、爆发、防御或抽牌；下一场战斗前没有稳定恢复点。反过来，如果当前战斗已经安全，药水只多省几点血，就可以继续保留。',
+        },
+        {
+          heading: '商店：按死亡风险排序，而不是按稀有度排序',
+          body: '进商店前先写下当前最可能导致死亡的短板。缺伤害就找即时输出或攻击药水，缺防御就找高效防御、减伤或保命药水，卡组太厚就优先删牌，核心已经明确就找过牌、能量或遗物支持。昂贵稀有牌只有在能立刻服务当前计划时才值得优先。',
+        },
+        {
+          heading: '删牌：提高关键牌出现率的长期收益',
+          body: '删牌的价值不是让卡组看起来更干净，而是提高每一轮抽到关键牌的概率。基础攻击和基础防御谁先删，要看当前短板：第一层缺伤害时过早删攻击可能出事；中后期输出成型后，低效攻击往往比基础防御更该离开。删牌要配合阶段需求，而不是固定公式。',
+        },
+        {
+          heading: '营火升级：优先升级改变回合结构的牌',
+          body: '好升级通常改变费用、抽牌、伤害断点、防御断点、持续收益或关键状态数值。只增加少量面板、但不影响击杀线或防御线的升级，要排在后面。Boss 前尤其要问：这次升级能否让某个危险回合变安全，或者让战斗少拖一轮。',
+        },
+        {
+          heading: '休息：不是认输，而是保住已获得收益',
+          body: '当血量低到下一场普通战、精英或 Boss 有明显死亡风险时，休息就是正确选择。升级的价值需要你活到后面才能兑现；如果不休息导致路线被迫放弃、药水被动消耗或直接死亡，贪升级反而亏。判断休息时要看后续节点，而不是只看当前血量百分比。',
+        },
+        {
+          heading: '把小优势滚成胜势的顺序',
+          body: '一瓶药水赢下精英，精英给遗物，遗物允许更贪路线，路线带来更多奖励，这就是资源滚动。反过来，省药水导致掉血，掉血导致休息，休息失去升级，失去升级导致下一场更难，也会滚成败势。稳定通关的核心，是在资源还便宜时主动花出去，避免之后用更贵的资源补同一个问题。',
+        },
+      ],
+      en: [
+        {
+          heading: 'The Resource Conversion Rule',
+          body: 'HP, potions, gold, upgrades, and removals are connected. A potion can become an elite relic. Gold can become a removal, key potion, or gap-filling card. An upgrade can prevent HP loss across multiple fights. Spend resources when they lower the failure rate of future key nodes.',
+        },
+        {
+          heading: 'Potions Are Route Tools',
+          body: 'The best potion use changes the route, not just the final turn. If a potion wins an elite, prevents a rest, protects an upgrade, or keeps a valuable path open, it has already paid for itself.',
+        },
+        {
+          heading: 'When To Use Potions',
+          body: 'Use a potion when it creates lethal, prevents major damage, preserves a campfire upgrade, covers a missing capability, or protects you before a stretch with no recovery point. If the fight is already safe and the potion saves only minor HP, keeping it can be better.',
+        },
+        {
+          heading: 'Shop by Death Risk',
+          body: 'Before entering a shop, name the weakness most likely to kill the run. Missing damage points toward attacks or damage potions. Missing block points toward efficient defense or safety potions. A bloated deck raises removal value. Expensive rares are best only when they serve the current plan immediately.',
+        },
+        {
+          heading: 'Removals Improve Access',
+          body: 'Removal value comes from increasing access to important cards. Whether to remove basic attacks or basic blocks first depends on the current act and weakness. Early damage shortages make attack removals risky; later, low-impact attacks often become the bigger draw tax.',
+        },
+        {
+          heading: 'Upgrade Turn Structure',
+          body: 'The best upgrades change cost, draw, damage breakpoints, block breakpoints, ongoing value, or key status numbers. Upgrades that only add small stats without changing a real turn should usually wait.',
+        },
+        {
+          heading: 'Resting Preserves Value',
+          body: 'Resting is correct when low HP creates real death risk in upcoming fights. An upgrade has value only if the run survives long enough to use it. Judge rests by the next nodes, not by pride or a fixed HP percentage.',
+        },
+        {
+          heading: 'How Small Edges Snowball',
+          body: 'A potion wins an elite, the elite gives a relic, the relic enables a greedier path, and that path creates more rewards. The reverse also happens: saving a potion causes HP loss, HP loss forces a rest, missing an upgrade makes the next fight worse. Spend cheap resources early when they prevent expensive fixes later.',
         },
       ],
     },
