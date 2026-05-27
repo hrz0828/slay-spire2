@@ -23,8 +23,6 @@ const articleLabels = {
     related: '同类延伸阅读',
     categories: '继续探索主题',
     categoryCta: '返回分类',
-    recommendation: '新手推荐',
-    readingOrder: '阅读顺序',
     sectionLabel: '章节',
     visualNote: '攻略配图',
   },
@@ -34,8 +32,6 @@ const articleLabels = {
     related: 'Related Articles',
     categories: 'Explore More Topics',
     categoryCta: 'Back to Category',
-    recommendation: 'Beginner pick',
-    readingOrder: 'Reading order',
     sectionLabel: 'Section',
     visualNote: 'Guide visual',
   },
@@ -118,7 +114,12 @@ export default async function ArticlePage({ params }: Props) {
   const labels = articleLabels[lang];
   const category = getCategory(article.category);
   const visual = getArticleVisual(article);
-  const relatedArticles = getArticlesByCategory(article.category)
+  const categoryArticles = getArticlesByCategory(article.category);
+  const categoryArticleIndex = Math.max(
+    0,
+    categoryArticles.findIndex(item => item.slug === article.slug),
+  );
+  const relatedArticles = categoryArticles
     .filter(item => item.slug !== article.slug)
     .slice(0, 4);
   const siblingCategories = contentCategories
@@ -139,7 +140,7 @@ export default async function ArticlePage({ params }: Props) {
                 {category.title[lang]}
               </Link>
               <span className="rounded-full border border-blood-700 bg-spire-950/70 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-bone-300">
-                {labels.recommendation} {String(article.priority).padStart(2, '0')}
+                {String(categoryArticleIndex + 1).padStart(2, '0')}
               </span>
             </div>
 
@@ -204,7 +205,7 @@ export default async function ArticlePage({ params }: Props) {
         <section className="rounded-2xl border border-blood-900/70 bg-spire-900/75 p-5 shadow-inner shadow-black/50">
           <h2 className="text-lg font-black text-bone-100">{labels.related}</h2>
           <div className="mt-4 space-y-3">
-            {relatedArticles.map(item => (
+            {relatedArticles.map((item, index) => (
               (() => {
                 const itemVisual = getArticleVisual(item);
 
@@ -222,7 +223,7 @@ export default async function ArticlePage({ params }: Props) {
                 />
                 <div className="p-4">
                 <p className="text-xs font-black uppercase tracking-[0.18em] text-ember-300">
-                  {labels.readingOrder} {String(item.priority).padStart(2, '0')} · {category.title[lang]}
+                  {String(index + 1).padStart(2, '0')}
                 </p>
                 <h3 className="mt-2 text-sm font-bold leading-6 text-bone-100 group-hover:text-amber-100">
                   {item.title[lang]}

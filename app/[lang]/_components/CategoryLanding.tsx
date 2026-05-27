@@ -49,7 +49,7 @@ export function CategoryLanding({ categoryId, lang }: CategoryLandingProps) {
           {zh ? '本栏目新手推荐' : 'Beginner Reading Order'}
         </h2>
         <div className="mt-5 grid gap-4">
-          {articles.map(article => {
+          {articles.map((article, index) => {
             const visual = getArticleVisual(article);
 
             return (
@@ -66,7 +66,7 @@ export function CategoryLanding({ categoryId, lang }: CategoryLandingProps) {
                 />
                 <div className="p-5">
                   <p className="text-xs font-black uppercase tracking-[0.22em] text-ember-300">
-                    {zh ? '阅读顺序' : 'Reading order'} {String(article.priority).padStart(2, '0')} · {category.title[lang]}
+                    {String(index + 1).padStart(2, '0')}
                   </p>
                   <h3 className="mt-3 text-lg font-bold text-bone-100 group-hover:text-amber-100">
                     {article.title[lang]}

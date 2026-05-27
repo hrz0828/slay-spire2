@@ -18,15 +18,15 @@
     "eyebrow": "Bilingual guides and tools",
     "title": "Slay the Spire 2 guides, card database and build tools",
     "description": "Structured references for characters, cards, relics, events, archetypes and ascension planning.",
-    "cardsTitle": "Current modules",
-    "cardsDescription": "Start with a stable information architecture, then expand into card filters, relic lookup and build planning.",
+    "cardsTitle": "Second-screen run intel",
+    "cardsDescription": "Check cards, relics, builds and tools while you play, keeping reward picks, route risk and boss prep in one decision flow.",
     "languageSwitch": "中文",
     "planningTitle": "Early Planning",
     "planningItems": [
-      "Organize characters, cards, relics, events, archetypes and ascension routes for lookup, run review and build planning.",
-      "Current modules: establish a stable information architecture first, then expand card filtering, relic lookup and build simulation.",
-      "Class filters, language switching and card details respond instantly on the frontend, making the site useful as a second-screen reference during runs.",
-      "Start with lightweight calculation cards to support quick route decisions, with room to expand into interactive calculators later."
+      "Look up characters, cards, relics, events and ascension routes to identify what your current run is missing.",
+      "Use card filters, relic notes and build routes to judge whether a reward supports your actual plan.",
+      "Class filters, language switching and card details are built for quick second-screen checks during a run.",
+      "Use route risk, card removal value and boss kill windows to make fewer guesses on key turns."
     ],
     "sections": {
       "cards": "Card database",
