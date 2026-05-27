@@ -332,6 +332,8 @@ const articleBlueprints: ArticleBlueprint[] = [
   { slug: 'before-high-ascension-strategies', category: 'strategy', priority: 30, title: { zh: '高进阶前应该掌握的 10 个策略：从能通关到稳定通关', en: '10 Strategies to Learn Before High Ascension: From Clearing to Winning Consistently' } },
   { slug: 'act-by-act-deck-checklist', category: 'guides', priority: 31, title: { zh: '逐层卡组体检清单：第一层、第二层、第三层分别要补什么', en: 'Act-by-Act Deck Checklist: What to Fix in Acts 1, 2, and 3' } },
   { slug: 'potions-shops-campfires-guide', category: 'strategy', priority: 32, title: { zh: '药水、商店与营火资源转换攻略：怎样把小优势换成通关率', en: 'Potions, Shops, and Campfires Guide: Converting Small Edges Into Win Rate' } },
+  { slug: 'early-access-update-guide', category: 'guides', priority: 33, title: { zh: '抢先体验版本最新攻略：更新期如何稳定上分、选牌和复盘', en: 'Early Access Update Guide: How to Draft, Route, and Review During Balance Changes' } },
+  { slug: 'coop-team-strategy-guide', category: 'guides', priority: 34, title: { zh: '多人合作模式攻略：四人队伍如何分工、控资源和避免连锁崩盘', en: 'Co-op Strategy Guide: Team Roles, Shared Resources, and Avoiding Cascading Losses' } },
 ];
 
 const categoryKeywordMap: Record<ContentCategoryId, LocalizedList> = {
@@ -1362,6 +1364,166 @@ const detailedArticleContent: Record<string, DetailedArticleContent> = {
         {
           heading: 'How Small Edges Snowball',
           body: 'A potion wins an elite, the elite gives a relic, the relic enables a greedier path, and that path creates more rewards. The reverse also happens: saving a potion causes HP loss, HP loss forces a rest, missing an upgrade makes the next fight worse. Spend cheap resources early when they prevent expensive fixes later.',
+        },
+      ],
+    },
+  },
+  'early-access-update-guide': {
+    description: {
+      zh: '面向抢先体验更新期的最新实战攻略：教你在卡牌、遗物、敌人和数值频繁变化时，继续做出稳定的选牌、路线和复盘判断。',
+      en: 'A practical early-access guide for staying consistent while cards, relics, enemies, and numbers change across updates.',
+    },
+    keywords: {
+      zh: ['杀戮尖塔2最新攻略', '抢先体验攻略', '版本更新', '平衡改动', '稳定通关'],
+      en: ['Slay the Spire 2 latest guide', 'early access guide', 'balance updates', 'patch changes', 'consistent wins'],
+    },
+    sections: {
+      zh: [
+        {
+          heading: '更新期最重要的不是背答案，而是保留判断框架',
+          body: '抢先体验阶段的卡牌数值、敌人压力、遗物触发和职业强度都可能变化，因此攻略不能只写“某张牌必拿”。更稳定的做法是保留五个判断维度：这张牌是否立刻解决当前层数的死亡风险，是否提高关键牌可达性，是否改善费用使用，是否补足 Boss 检查项，是否会在卡组变厚后变成污染。数值变了，框架仍然能用。',
+        },
+        {
+          heading: '读补丁后先找三类变化',
+          body: '每次更新后不要逐字记全部改动，先找三类会影响胜率的内容：低层普通战和精英是否更快施压，核心过渡牌是否改变伤害或费用断点，Boss 或后期敌人是否新增限制。普通战变强会提高即时防御和药水价值，过渡牌变弱会降低贪精英安全性，Boss 检查项变化会影响第三层商店和营火优先级。',
+        },
+        {
+          heading: '选牌：从“强度评级”切换到“岗位评级”',
+          body: '更新期最容易失误的是继续按旧评级拿牌。更好的分类方式是给每张候选牌标岗位：即时伤害、群体处理、单回合防御、重复防御、过牌、能量、成长、启动、终结。一次卡牌平衡通常只会改变某个岗位的效率，不会改变卡组需要这些岗位的事实。缺岗位时拿 B 级解法，也常比拿一张不补短板的 A 级牌更稳。',
+        },
+        {
+          heading: '路线：补丁后的前十局要降低贪心上限',
+          body: '刚更新后的前几局，不要按旧版本路线强行连打精英。先把路线当成测试数据：第一层最多验证一到两个精英点，第二层优先保留商店、营火和普通战修正空间，第三层减少问号房赌博。等你确认普通战掉血、精英门槛和 Boss 长战压力后，再逐步提高路线贪心度。',
+        },
+        {
+          heading: '药水和商店：把未知版本风险换成确定答案',
+          body: '版本刚变时，药水价值会上升，因为它能覆盖你尚未理解的新敌人节奏。商店也应从追求上限转为补确定短板：买能解决下一场关键战的药水，删掉明显拖慢启动的基础牌，购买低条件防御或过牌。更新期最亏的消费，是买一张需要未来配合的牌，却没有解决眼前会让你掉 30 血的问题。',
+        },
+        {
+          heading: '新旧职业都要重新校准起手强度',
+          body: '不要默认熟悉职业仍按旧节奏运转，也不要默认新职业只能走宣传中最显眼的机制。起手牌组、起始遗物和常见低稀有牌决定第一层安全性；职业终局上限决定第三层是否需要更早找成长。更新后每个职业至少记录三件事：第一层最缺什么，第二层最怕什么，哪些牌从过渡牌变成核心牌或反过来变弱。',
+        },
+        {
+          heading: '复盘：把失败归因到版本信息，而不是情绪',
+          body: '更新期复盘要记录具体问题：哪一场敌人比预期多打了多少伤害，哪张旧强牌没有改变击杀线，哪个 Boss 回合需要的防御或爆发比旧版本更高。不要只写“这版本难”或“某牌废了”。当三局以上出现同类失败，就把它升级成新默认规则，例如提前补群体、少打一个精英、或把某类药水保到指定战斗。',
+        },
+        {
+          heading: '适合更新期的稳定执行清单',
+          body: '开局前确认当前版本是否有已知平衡变化；第一层前半优先拿低条件伤害和能保精英的药水；第二层入口检查群体、防御和抽牌是否全都在线；第三层只补终局缺口，不拿未经验证的花活；每次死亡只记录一个版本相关结论。这样即使环境变化，你也能把每局变成有效样本。',
+        },
+      ],
+      en: [
+        {
+          heading: 'Keep the Framework, Not Fixed Answers',
+          body: 'During early access, card numbers, enemy pressure, relic triggers, and class strength can change. Stable play comes from judging whether a pick solves current death risk, improves access to key cards, uses energy well, answers boss checks, or becomes deck pollution later.',
+        },
+        {
+          heading: 'Read Patches by Impact Type',
+          body: 'After an update, identify three high-impact changes first: whether early fights pressure faster, whether bridge cards changed damage or cost breakpoints, and whether bosses or late enemies gained new checks. These changes affect routing, shop priorities, and campfire decisions immediately.',
+        },
+        {
+          heading: 'Draft by Job, Not Old Tier Memory',
+          body: 'Assign each candidate card a job: immediate damage, area handling, burst block, repeatable block, draw, energy, scaling, setup, or finishing. Balance changes may alter efficiency, but decks still need these jobs filled at the right time.',
+        },
+        {
+          heading: 'Route More Conservatively After Updates',
+          body: 'In the first runs after a patch, avoid forcing old elite routes. Use Act 1 to test one or two elite thresholds, keep Act 2 flexible with shops and campfires, and reduce Act 3 event gambling until enemy pressure is familiar again.',
+        },
+        {
+          heading: 'Use Potions and Shops to Buy Certainty',
+          body: 'Potion value rises when enemy patterns are uncertain. Shops should solve known near-term risks through potions, removals, efficient block, or draw. Buying a future payoff while ignoring the next fight is especially costly during update periods.',
+        },
+        {
+          heading: 'Recalibrate Every Class',
+          body: 'Do not assume familiar classes still follow old tempo, and do not force new classes into only their most obvious mechanic. Track what each class lacks in Act 1, what punishes it in Act 2, and which cards changed role after updates.',
+        },
+        {
+          heading: 'Review Version-Specific Failures',
+          body: 'Record concrete failures: which enemy dealt more damage than expected, which old strong card missed a breakpoint, or which boss turn demanded more block or burst. After repeated patterns, turn that note into a new default rule.',
+        },
+        {
+          heading: 'Stable Update-Period Checklist',
+          body: 'Check known balance changes before starting, draft low-condition Act 1 damage, preserve potions for uncertain elite tests, verify Act 2 area/block/draw, fix only endgame gaps in Act 3, and write one version-specific lesson after each loss.',
+        },
+      ],
+    },
+  },
+  'coop-team-strategy-guide': {
+    description: {
+      zh: '多人合作模式的高密度实战攻略：从队伍分工、路线投票、药水与金币节奏，到如何避免一个人的失误拖垮整队。',
+      en: 'A dense co-op strategy guide covering team roles, route votes, potion and gold timing, and preventing one weak run from collapsing the team.',
+    },
+    keywords: {
+      zh: ['杀戮尖塔2合作模式', '多人攻略', '四人合作', '队伍分工', '资源管理'],
+      en: ['Slay the Spire 2 co-op', 'multiplayer guide', 'four-player co-op', 'team roles', 'resource management'],
+    },
+    sections: {
+      zh: [
+        {
+          heading: '合作模式的核心变化：胜率来自团队最低短板',
+          body: '单人模式只需要让自己的卡组过检查，合作模式则要管理队伍中最脆弱的那一条线。一个人路线过贪、药水空栏、卡组启动慢，都会迫使全队在后续节点让路。讨论时不要只问谁的上限最高，而要问谁最可能在下一场关键战掉大量血，以及队伍能不能用路线、药水、商店或角色分工补这个短板。',
+        },
+        {
+          heading: '开局分工：先定岗位，再定流派',
+          body: '四人队伍最稳的开局不是每个人都追自己最想玩的流派，而是先覆盖岗位：稳定前期伤害、群体处理、单体 Boss 输出、团队容错、后期成长和资源转化。某个玩家抽到强成长牌，不代表全队都能慢下来等他成型；至少要有人承担第一层精英和第二层多目标战的即时压力。',
+        },
+        {
+          heading: '路线投票：用最弱成员决定风险上限',
+          body: '路线选择应按队伍最低安全线计算。若三个人能打精英、一个人明显不能打，就不要把精英当成“平均可行”。更稳的投票顺序是：先看最低血量和药水，再看谁缺关键升级，然后看商店能否补团队短板，最后才比较精英奖励。合作模式中，少拿一个遗物但保住全队升级节奏，常比强行过高风险路线更赚。',
+        },
+        {
+          heading: '选牌沟通：不要只报牌名，要报解决的问题',
+          body: '合作局沟通要避免“这张看起来很强”这种低信息表达。更有效的报法是：我拿这张能补第二层群体，我跳这张是因为费用曲线已经偏高，我需要商店删牌否则启动太慢，我这张升级能让精英少掉 15 血。把选牌转化为问题和收益，队友才知道是否需要调整自己的岗位。',
+        },
+        {
+          heading: '药水管理：团队需要共享药水窗口',
+          body: '即使药水不能直接共享，药水窗口也要共享规划。队伍应提前标记谁的药水用于精英，谁的药水用于 Boss，谁可以在普通战主动喝来保血。最差的情况是每个人都想把药水留到后面，结果当前最弱成员被迫休息；或者所有人都在普通战喝光，关键精英没有任何补救手段。',
+        },
+        {
+          heading: '商店与金币：先救会死的人，再买会赢更多的人',
+          body: '合作模式的商店优先级要从个人收益切换为团队失败率。低血量、低防御、卡组过厚或缺关键岗位的成员，应优先获得商店修正机会。已经领先的成员可以少买一张锦上添花的牌，把团队路线留给更需要删牌、药水或基础补强的人。队伍总收益不是四个人都最大化个人上限，而是没有人被短板击穿。',
+        },
+        {
+          heading: '营火：升级顺序要服务下一场共同难题',
+          body: '营火讨论不应变成每个人都升级自己最喜欢的牌。先确定下一场共同难题：是否需要更快击杀精英，是否需要挡住 Boss 大回合，是否需要让某个慢启动卡组稳定起来。能改变这些共同难题的升级优先级最高；单纯提高个人手感但不影响危险回合的升级，可以延后。',
+        },
+        {
+          heading: '避免连锁崩盘的三条规则',
+          body: '第一，任何成员连续两场掉血过多，下一段路线就必须降低风险；第二，任何成员药水空栏且血量危险，队伍要优先安排商店、普通战或营火修正；第三，任何成员卡组明显启动慢，其他人就不要同时转向慢速成长。合作模式失败常常不是一场战斗突然爆炸，而是多个小风险没人承认，最后叠成不可修复的局面。',
+        },
+      ],
+      en: [
+        {
+          heading: 'Team Win Rate Follows the Weakest Line',
+          body: 'In solo play, only one deck must pass the checks. In co-op, the fragile run often defines team risk. Greedy routing, empty potion slots, and slow starts from one player can force the whole group into worse future nodes.',
+        },
+        {
+          heading: 'Assign Jobs Before Archetypes',
+          body: 'A stable team covers early damage, area handling, boss damage, safety, late scaling, and resource conversion before everyone chases favorite archetypes. At least one player should be ready for Act 1 elites and Act 2 multi-enemy pressure.',
+        },
+        {
+          heading: 'Route by the Lowest Safety Line',
+          body: 'If three players can handle an elite and one clearly cannot, the route is not safely elite-ready. Vote by lowest HP and potion status first, key upgrades second, shop repair value third, and elite reward last.',
+        },
+        {
+          heading: 'Communicate the Problem a Pick Solves',
+          body: 'Do not only name cards. Say what the pick fixes: Act 2 area, high-cost curve, slow setup, missing block, or an upgrade that saves major HP in an elite. This lets teammates adjust roles instead of duplicating answers.',
+        },
+        {
+          heading: 'Plan Potion Windows as a Team',
+          body: 'Even when potions are individual, potion timing is a team resource. Decide whose potion covers elites, whose covers bosses, and who can spend one in a hallway to protect HP. Emptying every potion slot before a key fight creates shared risk.',
+        },
+        {
+          heading: 'Shop to Reduce Team Failure Rate',
+          body: 'The player most likely to die should often get the highest shop priority. Removals, potions, or basic defensive fixes for a weak member can be worth more than a luxury power spike for someone already ahead.',
+        },
+        {
+          heading: 'Campfires Should Solve the Next Shared Test',
+          body: 'Upgrade discussions should start with the next hard fight. Prioritize upgrades that change elite damage races, boss burst turns, or slow-deck setup. Personal comfort upgrades can wait when they do not change dangerous turns.',
+        },
+        {
+          heading: 'Three Rules Against Cascading Losses',
+          body: 'Lower route risk after any member bleeds across two fights, repair empty-potion low-HP members before greed routes, and avoid having everyone pivot into slow scaling at the same time. Co-op losses usually grow from ignored small risks.',
         },
       ],
     },
